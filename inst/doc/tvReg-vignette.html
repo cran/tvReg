@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Univariate models: the tv-LM and tv-AR</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>Univariate models: the tv-LM and tv-AR</h1>
+
+<p>The general formula of these models is:
+\[
+y_t = X_t' \beta_t + u_t,  \hspace{0.3cm} t = 1, \ldots, T  \ \ \ (1)
+\]
+where \(X_t = (X_{0t}, X_{1t}, \ldots, X_{dt})&lsquo;\) and \(\beta_t = (\beta_{0t}, \beta_{1t}, \ldots, \beta_{dt})&rsquo;\) are vectors and \(u_t\) is a random variable. When \(X_t\) contains lags of \(y_t\) then we have the time-varying parameters AR model (tv-AR) which is fitted by function <em>tvAR</em>. When \(X_t\) contains only exogenous variables, then the model is denoted by tv-LM and it is fitted by function <em>tvLM</em>.</p>
+
+<h2>Standard usage of <em>tvLM</em></h2>
+
+<p>The <em>tvLM</em> function fits a tv-LM using function <em>tvOLS</em> in the estimation. The latter includes the algorithm of kernel smoothing nonparametric techniques for a linear model.  The only mandatory argument is <em>formula</em> which should be a single formula for a single equation model. This formula follows the standard regression formula in <em>R</em> (see documentation of <em>formula</em>). An object of class <em>tvlm</em> is returned. </p>
+
+<p>The following example demonstrates the functionality of <em>tvLM</em> on generated data and compares it its <em>lm</em> estimation. The latter assumes that the model coefficients are constant. The data generating process of the example below has time-varying coefficients and therefore its estimation with function <em>lm</em> will only find some kind of middle value of all the values over time.</p>
+
+<p>We want to estimate the following model:
+\[
+y_t  = \beta_{1t} X_{1t}+ \beta_{2t} X_{2t} + u_t, \ \ t = 1, \ldots, T,
+\]
+where the coefficients are function of a scaled time variable \(\tau = t/T\). In particular, \(\beta_{1t}= \sin(2\pi\tau)\) and \(\beta_{2t} = 2\tau\).</p>
+
+<pre><code class="r">## Simulate a linear process with time-varying coefficient as functions of
+## scaled time.
+library(tvReg)
+tau &lt;- seq(1:1000)/1000
+beta &lt;- data.frame(beta1 = sin(2 * pi * tau), beta2 = 2 * tau)
+X1 &lt;- rnorm(1000)
+X2 &lt;- rchisq(1000, df = 4)
+error &lt;- rt(1000, df = 10)
+y &lt;- apply(cbind(X1, X2) * beta, 1, sum) + error
+data &lt;- data.frame(y = y, X1 = X1, X2 = X2)
+
+## Estimate coefficients with lm and tvLM for comparison
+coef.lm &lt;- stats::lm(y ~ 0 + X1 + X2, data = data)$coef
+model.tvlm &lt;- tvLM(y ~ 0 + X1 + X2, data = data)
+
+## Plot the estimates of beta1
+par(mar = c(4, 4, 1, 1), oma = c(1, 1, 1, 1))
+plot(tau, beta[, 1], type = &quot;l&quot;, main = &quot;&quot;, ylab = expression(beta[1]), xlab = expression(tau), 
+    ylim = range(beta[, 1], model.tvlm$tvcoef[, 1]))
+abline(h = coef.lm[1], col = 2)
+lines(tau, model.tvlm$tvcoef[, 1], col = 4)
+legend(&quot;topright&quot;, c(expression(beta[1]), &quot;lm&quot;, &quot;tvlm&quot;), col = c(1, 2, 4), bty = &quot;n&quot;, 
+    lty = 1, cex = 0.8)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" style="display: block; margin: auto;" /></p>
+
+<p>The first line loads the <em>tvReg</em> package. Then data is simulated and a data frame is created with the dependent variable and the regressors. Estimation of this model is run with the <em>lm</em> and the <em>tvLM</em> functions for comparison. As we see in the plot, the estimation assuming a constant \(\beta_{1t}\) lays around the average value of all \(\beta_{1t}\), while the estimation assuming time-varying coefficients is more accurate and closer to the true value.</p>
+
+<h2>User options of <em>tvLM</em></h2>
+
+<p>The user can provide additional optional arguments to modify the default estimation. All optional arguments are described below:</p>
+
+<h3>Smoothing random variable</h3>
+
+<p>By default, coefficients are assumed to vary as an unknown function of the scaled time (\(\tau\) in the example). There are contexts in which coefficients depend on another random variable. The user can modify this setting by entering a numeric vector in parameter <em>z</em> with the values of this smoothing variable over the correspondent time period. The example below shows this functionality with generated data. The example generating process of function <em>arima.sim</em> from package <em>stats</em> is used in the example.</p>
+
+<pre><code class="r">## Data generation
+set.seed(42)
+z &lt;- stats::arima.sim(n = 1000, list(ar = c(0.8897, -0.4858), ma = c(-0.2279, 
+    0.2488)), sd = sqrt(0.1796))
+beta &lt;- data.frame(beta1 = sin(2 * pi * z), beta2 = 2 * z)
+y &lt;- apply(cbind(X1, X2) * beta, 1, sum) + error
+data &lt;- data.frame(y = y, X1 = X1, X2 = X2, z = z)
+
+## Coefficients estimation
+coef.lm &lt;- stats::lm(y ~ 0 + X1 + X2, data = data)$coef
+model.tvlm2 &lt;- tvLM(y ~ 0 + X1 + X2, z = z, data = data, bw = 0.4, est = &quot;ll&quot;)
+
+## Plotting the estimates of beta1
+sort.index &lt;- sort.int(z, index.return = TRUE)$ix
+par(mar = c(4, 4, 1, 1), oma = c(1, 1, 1, 1))
+plot(z[sort.index], beta[sort.index, 1], type = &quot;l&quot;, main = &quot;&quot;, ylab = expression(beta[1]), 
+    xlab = expression(z[t]), ylim = range(beta[, 1], model.tvlm2$tvcoef[, 1]))
+abline(h = coef.lm[1], col = 2)
+lines(z[sort.index], model.tvlm2$tvcoef[sort.index, 1], col = 4)
+legend(&quot;top&quot;, c(expression(beta[1]), &quot;lm&quot;, &quot;tvLM&quot;), col = c(1, 2, 4), bty = &quot;n&quot;, 
+    lty = 1, cex = 0.5)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" style="display: block; margin: auto;" /></p>
+
+<p>As in the previous example, the coefficient estimate from <em>lm</em> falls around the mean of all \(\beta_{1t}\) over the whole time period. While the <em>tvLM</em> estimates follow the true process closely. Note that if the bandwidth was very large, then the two estimates would be very similar.</p>
+
+<h3>Bandwidth</h3>
+
+<p>When no bandwidth value is input in parameter <em>bw</em>, this is calculated by cross-validation. This minimisation might be a bit slow when the dataset is large and it should be avoided when the user knows the value of the bandwidth. As we can see in the previous example, the bandwidth was chosen to be 0.4 by the user.</p>
+
+<h3>Kernel type</h3>
+
+<p>The default kernel is the Epanechnikov kernel (&ldquo;Epa&rdquo;), a compact kernel function in [-1, 1]. The Gaussian kernel may also be chosen in <em>tkernel</em> as well, although the authors do not recommend it as calculations are computationally slower.</p>
+
+<h3>Estimation methodology</h3>
+
+<p>The default estimation methodology is the Nadaraya-Watson or local constant (&ldquo;lc&rdquo;). Parameter <em>est</em> can be chosen to be &ldquo;ll&rdquo; to perform a local linear estimation.</p>
+
+<h3>Data</h3>
+
+<p>Function <em>tvLM</em> has also argument <em>data</em> to specify the data frame or matrix that contains the variables in the model. If no dataset is input, the function uses variables in the global environment or the one attached to the search path.</p>
+
+<h3>Singular fit</h3>
+
+<p>As the <em>tvOLS</em> wraps R function <em>lm.wfit</em>, the default is not to refuse to fit a low-rank model and have NA elements in the coefficients. The user might change parameter <em>singular.ok</em> to <em>FALSE</em>, so the programme stops in case of low-rank model.</p>
+
+<h2>Standard usage of <em>tvAR</em></h2>
+
+<p>A tv-AR model is a special case of tv-LM in which regressors contain lagged variables of the dependent variable <em>y</em>. The number of lags included depend on the model order <em>p</em>. Other exogenous variables might be included in the model using parameter <em>exogen</em>. An intercept is included by default unless the user inputs <em>type</em> = &ldquo;none&rdquo; into the function call. Econometrically, this function also wraps estimator <em>tvOLS</em> that needs a bandwidth <em>bw</em> which is calculated by cross-validation when the user does not input any number. An object of class <em>tvar</em> is returned.</p>
+
+<p>The following examples demonstrates the functionality of <em>tvAR</em> on generated data, and compares it the output of function <em>ar.ols</em> from the <em>stats</em> package. The data generating process of the example below has time-varying coefficients and therefore its estimation with function <em>ar.ols</em> will only find a middle value of all the values over time.</p>
+
+<p>The data generating process of the example below is as following:
+\[
+y_t  = \beta_{1t} y_{t-1}+ \beta_{2t} y_{t-2} + u_t, \ \ t = 1, \ldots, T,
+\]
+with coefficients \(\beta_{1t} = 0.5 \cos(2\pi \tau)\) and \(\beta_{2t} = (\tau -0.5)^2\) where \(\tau = t/T\).</p>
+
+<pre><code class="r">## Simulate an tvAR(2) process
+tt &lt;- (1:1000)/1000
+beta &lt;- cbind(0.5 * cos(2 * pi * tt), (tt - 0.5)^2)
+y &lt;- numeric(1000)
+y[1] &lt;- 0.5
+y[2] &lt;- -0.2
+## y(t) = beta1(t) y(t-1) + beta2(t) y(t-2) + ut
+for (t in 3:1000) {
+    y[t] &lt;- y[(t - 1):(t - 2)] %*% beta[t, ] + rnorm(1)
+}
+Y &lt;- tail(y, 500)
+
+## Estimate coefficients of process Y with ar.ols and tvAR and compare them
+## in a plot
+model.ar.2p &lt;- ar.ols(Y, aic = FALSE, order = 2, intercept = FALSE, demean = FALSE)
+model.tvAR.2p &lt;- tvAR(Y, p = 2, type = &quot;none&quot;, est = &quot;ll&quot;)
+</code></pre>
+
+<p>The coefficients might change in time as a function of a random variable \(z_t\). See example below for illustration:</p>
+
+<pre><code class="r">## Simulate a AR(1) process with coefficients depending on z
+z &lt;- runif(2000, -1, 1)
+beta &lt;- (z - 0.5)^2
+y &lt;- numeric(2000)
+y[1] &lt;- 0.5
+error &lt;- rnorm(2000)
+## y(t) = beta1(z(t)) y(t-1) + ut
+for (t in 2:2000) {
+    y[t] &lt;- y[(t - 1)] %*% beta[t] + error[t]
+}
+## Remove initial conditions effects
+Z &lt;- z  #tail (z, 1500)
+Y &lt;- y  #tail (y, 1500)
+# beta &lt;- tail (beta, 1500) Estimate coefficients of process Y with ar.ols
+# and tvAR and compare them in a plot
+model.ar.1p &lt;- ar.ols(Y, aic = FALSE, order = 1, intercept = FALSE, demean = FALSE)
+model.tvAR.1p.z &lt;- tvAR(Y, p = 1, z = Z, type = &quot;none&quot;, est = &quot;ll&quot;)
+</code></pre>
+
+<h2>User options of <em>tvAR</em></h2>
+
+<p>The user can provide additional optional arguments to modify the default estimation. Refer to section &#39;User options of <em>tvLM</em>&#39; to understand function parameters <em>bw</em>, <em>est</em>, <em>tkernel</em> and <em>singular.ok</em> for details. Also, the smoothing variable <em>z</em> maybe a vector of the scale of time or a random variable. In addition, the <em>tvAR</em> has the following arguments:</p>
+
+<h3>Type</h3>
+
+<p>The fitted model contains an intercepted by default, i.e., it has a mean different from zero. The user can set parameter <em>type</em> to &#39;none&#39; so the model has a zero mean.</p>
+
+<h3>Autoregressive model with coefficient restrictions</h3>
+
+<p>An autoregressive process of order <em>p</em> does not necessarily contains all lags coefficients, some lags might not have an effect in the current state. Parameter <em>fixed</em> permits to impose these restrictions. The variables order in this function is: lags variables, exogenous variables (if any) and intercept (if any). For example in a model of lag 4, the order is: lag 1, lag 2, lag 3, lag 4, exogenous variables and mean. Parameter <em>fixed</em> is a vector as long as the number of parameters in our model and it should contain an NA for the parameters we want to estimate and zero for the constrained lags. </p>
+
+<p>The example below uses simulated variable <em>Y</em> from above and fits a model with 6 lags, from which only the first, third and sixth lag are part of the model, the model has an intercept and there are no exogenous variables. It is estimated with the nonparametric local linear model and the bandwidth is calculated by cross-validation.</p>
+
+<pre><code class="r">## Estimate only coefficient from odd lags and the intercept
+tvAR.6p &lt;- tvAR(y, p = 6, type = &quot;const&quot;, fixed = c(NA, 0, NA, 0, NA, 0, NA), 
+    est = &quot;ll&quot;)
+</code></pre>
+
+<p>#Systems of linear models: the tv-VAR and tv-SURE models </p>
+
+<p>The formula of systems of linear models can be generally express as in (1) with \(y_t = (y_{1t}, y_{2t}, \ldots, y_{Kt})&lsquo;\) for \(K\) the number of equations in the system. Similarly, the error term \(u_t =(u_{1t}, u_{2t}, \ldots, u_{Kt})&rsquo;\). Variables \(X_t\) and \(\beta_t\) are matrices. </p>
+
+<p>Regarding systems of equations, the <em>tvSURE</em> function fits a time-varying seemingly unrelated equations models. Its main parameter is <em>formula</em> which is a list of objects of class <em>formula</em>, one formula for each equation. Equations might have a different number of regressors and these do not have to be the same. </p>
+
+<p>Another multiequation model included in the package is the time-varying vector autoregressive in function <em>tvVAR</em> whose main parameters are a matrix of dependent variables <em>y</em> and the number of lags <em>p</em>. It returns an object of class <em>tvvar</em>. Coefficients of the <em>tvVAR</em> are not interpretable, instead the time-varying coefficients impulse response function is coded in function <em>tvIRF</em>. The latter takes an object of class <em>tvvar</em> and returns an object of class <em>tvirf</em>. </p>
+
+<h2>Standard usage of <em>tvVAR</em> and <em>tvIRF</em></h2>
+
+<p>A time-varying coefficients vector autoregressive model is a multiequation time-varying coefficients autoregressive model. The dependent variable <em>y</em> is a matrix with as many columns as equations. This model has at least two equations. Regressors are often the same for each equation and they consist of the lagged variables of <em>y</em>, where the number of lags is given in parameter <em>p</em>, an intercept if parameter <em>type</em> is set to &ldquo;const&rdquo; and other exogenous variables input in parameter <em>exogen</em>. Econometrically, function <em>tvOLS</em> is called to calculate the estimates for each equation independently using <em>bw</em> as the bandwidth. The user can input a single scalar in <em>bw</em> or a vector of scalars, one bandwidth for each equation. If <em>bw</em> is kept as <em>NULL</em>, one bandwidth for each equation is calculated by cross-validation. An object of class <em>tvvar</em> is returned. </p>
+
+<p>As in the other models, the kernel and the estimation methodology can be chosen in parameters <em>tkernel</em> and <em>est</em>. The return is an object of class <em>tvvar</em> which can be used to estimate the time-varying impulse response function with function <em>tvIRF</em>. The smoothing variable by default is time, but another random variable can be used by inputting it in parameter <em>z</em>.</p>
+
+<p>Example below uses the macroeconomic data from Primiceri (2005). Three variables are included in dataset <em>usmacro</em> from package <em>bvarsv</em>: inflation rate (inf), unemployment rate (une) and treasury bill interest rate (tbi) for the US. A constant parameters VAR is estimated using function <em>VAR</em> from package <em>vars</em> and a time-varying coefficients VAR is estimated with <em>tvVAR</em> both with four lags.</p>
+
+<p>\[
+\text{inf}_t = a_{t}^1 +\sum_{i=1}^4 b_{it}^ 1 \ \text{inf}_{t-i} +\sum_{i=1}^4 c_{it}^1 \ \text{une}_{t-i} +\sum_{i=1}^4 d_{it}^1\ \text{tbi}_{t-i} +u _{t}^1
+\]</p>
+
+<p>\[
+\text{une}_t = a_{t}^2 +\sum_{i=1}^4 b_{it}^ 2 \ \text{inf}_{t-i} +\sum_{i=1}^4 c_{it}^2 \ \text{une}_{t-i} +\sum_{i=1}^4 d_{it}^2 \ \text{tbi}_{t-i} +u _{t}^2
+\]</p>
+
+<p>\[
+\text{tbi}_t = a_{t}^3 +\sum_{i=1}^4 b_{it}^ 3 \ \text{inf}_{t-i} +\sum_{i=1}^4 c_{it}^3 \ \text{une}_{t-i} +\sum_{i=1}^4 d_{it}^3\ \text{tbi}_{t-i} +u _{t}^3
+\]</p>
+
+<pre><code class="r">## Inflation rate, unemployment rate and treasury bill interest rate for the
+## US, as used by Primiceri (2005).
+data(usmacro, package = &quot;bvarsv&quot;)
+model.VAR &lt;- vars::VAR(usmacro, p = 4, type = &quot;const&quot;)
+model.tvVAR &lt;- tvVAR(usmacro, p = 4, type = &quot;const&quot;)
+</code></pre>
+
+<p>The user can provide additional optional arguments to modify the default estimation. Refer to section &#39;User options of <em>tvAR</em>&#39; to understand function parameters <em>p</em>, <em>z</em>, <em>bw</em>, <em>type</em>, <em>exogen</em>, <em>est</em>, <em>tkernel</em> and <em>singular.ok</em> for details. Note that the current version only allows one single random variable <em>z</em>, the same for every equation. The <em>tvVAR</em> model wraps estimator <em>tvOLS</em>. At the moment all equations are estimated as if there were independent, i.e. line by line. The variance-covariance matrix in the residuals can be used to calculate the orthogonal time-varying IRF function.</p>
+
+<h2>User options of <em>tvIRF</em></h2>
+
+<p>The main parameters <em>x</em> which is an object of class <em>tvvar</em>. The user can provide additional optional arguments to modify the default estimation. </p>
+
+<h3>Impulse and response variables</h3>
+
+<p>Coefficients for every impulse and response variables are calculated by default. The user has the option to pick a subset of impulse variables and/or response variables using parameters <em>impulse</em> and <em>response</em>.</p>
+
+<h3>Horizon</h3>
+
+<p>The number of time periods ahead for which the impulse response function is calculated is 10. The user can input a longer of shorter horizon using parameter <em>n.ahead</em>.</p>
+
+<h3>Orthogonal tv-IRF</h3>
+
+<p>Function <em>tvIRF</em> calculates one impulse response function for each point in time. It is likely that the errors variance-covariance matrix of a process with time-varying coefficients is also time-varying. Those, the default of
+parameter <em>ortho.cov</em> is &ldquo;tv&rdquo;. Note that the use can input a value of the bandwidth for the covariance matrix estimation in <em>bw.cov</em>. This function calls function <em>tvCov</em> in the calculation of the MA (\(\infty\)) coefficients. It is possible to use a constant variance-covariance matrix by setting <em>ortho.cov</em> to &ldquo;const&rdquo;.</p>
+
+<pre><code class="r">## Estimate a the impulse response functions with irf and tvIRF from previous
+## vector autoregressive models
+model.irf &lt;- vars::irf(model.VAR)
+model.tvIRF &lt;- tvIRF(model.tvVAR)
+</code></pre>
+
+<h3>Cumulative tv-IRF</h3>
+
+<p>The cumulative time-varying IRF is fitted when parameter <em>cumulative</em> is set to TRUE. </p>
+
+<pre><code class="r">## Estimate a the tvIRF with time-varying covariance function The estimation
+## bandwidth might be automatically calculated or input
+model.tvIRF2 &lt;- tvIRF(model.tvVAR, cumulative = TRUE)
+</code></pre>
+
+<h2>Standard usage of the tvSURE</h2>
+
+<p>A time-varying coefficients SURE model is a multiequation where the regressors are exogenous variables. The main parameter of this function is a list of formulas, one for each equation. The formula format is inpired in the formula from package <em>systemfit</em> which estimates parametric multiequation problems with constant coefficients. The examples below use the dataset <em>Kmenta</em> from package <em>sysmtefit</em> to illustrate a demand/supply problem using different models.An object of class <em>tvsure</em> is returned by the main function <em>tvSURE</em>.</p>
+
+<p>The estimation of this multiequation problem can be done equation by equation, assuming no correlation in the error variance-covariance matrix, or as a system where the information in this matrix is used. Regressors can be different for each equation. An intercept is included by default in each equation unless its formula states it differently. Function <em>tvSURE</em> is a wrapper of the two estimation procedures. Estimator <em>tvOLS</em> is used by default, calculating estimates for each equation independently with different bandwidths <em>bw</em>. The user is able to input a set of bandwidths or a single bandwidth to be used in the estimation instead. In addition, estimator <em>tvGLS</em> is used when equations are assumed to be related by the variance-covariance matrix of the error.</p>
+
+<pre><code class="r">data(&quot;Kmenta&quot;, package = &quot;systemfit&quot;)
+eqDemand &lt;- consump ~ price + income
+eqSupply &lt;- consump ~ price + farmPrice + trend
+system &lt;- list(demand = eqDemand, supply = eqSupply)
+
+## OLS estimation of a system
+ols.fit &lt;- systemfit::systemfit(system, method = &quot;OLS&quot;, data = Kmenta)
+
+## tvOLS estimation of a system with the local linear estimator
+tvols.fit &lt;- tvSURE(system, data = Kmenta, est = &quot;ll&quot;)
+</code></pre>
+
+<p>When the user desires to fit a time-varying coefficients SURE model, if the error variance-covariance matrix is known, parameter <em>method</em> is set to &ldquo;tvGLS&rdquo; and the variance-covariance matrix is input into parameter <em>Sigma</em>. Otherwise, if method is set to &ldquo;tvGLS&rdquo; and <em>Sigma</em> is NULL, the estimation is done as in the case method = &ldquo;tvOLS&rdquo;. When the user desires to fit a time-varying coefficients SURE model and Sigma is unknown, parameter <em>method</em> must be set to &ldquo;tvFGLS&rdquo;. The error variance-covariance matrix will be estimated with function <em>tvCov</em>.</p>
+
+<pre><code class="r">## FGLS estimation - SURE estimation
+fgls1.fit &lt;- systemfit::systemfit(system, data = Kmenta, method = &quot;SUR&quot;)
+
+## tvFGLS estimation - tvSURE estimation
+tvfgls1.fit &lt;- tvSURE(system, data = Kmenta, method = &quot;tvFGLS&quot;)
+</code></pre>
+
+<h2>User options of <em>tvSURE</em></h2>
+
+<p>The user can provide additional optional arguments to modify the default estimation. Refer to section &#39;User options of <em>tvLM</em>&#39; to understand function parameters <em>z</em>, <em>data</em>, <em>bw</em>, <em>est</em>, <em>tkernel</em> and <em>singular.ok</em> for details. Note that the current version only allows one single random variable <em>z</em>, the same one, for every equation. The <em>tvSURE</em> function wraps estimators <em>tvOLS</em> and <em>tvGLS</em>. </p>
+
+<h3>Choosing the estimation method</h3>
+
+<p>This parameter defines the type of estimation to be performed. The choices for parameter <em>method</em> are:</p>
+
+<ol>
+<li>&ldquo;tvOLS&rdquo; for a line by line estimation as if the error variance-covariance matrix, \(\Sigma\) was the identity matrix.</li>
+<li>&ldquo;tvGLS&rdquo; to estimate the coefficients of the system using \(\Sigma\), for which the user must input it in parameter <em>Sigma</em>. Parameter <em>Sigma</em> takes either a symmetric matrix or an array. If \(\Sigma\) is considered constant, its number of rows and columns is equal to the number of equations (neq) in the system. If \(\Sigma\) is considered to chanve with time, then an array of dimension neq \(\times\) neq \(\times\) number of time periods must be input. Note that if the user inputs a diagonal variance-covariance matrix with diagonal values different from one, then a time-varying weighted least squares is performed. If &ldquo;tvGLS&rdquo; is chosen in <em>method</em> but <em>Sigma</em> is NULL, then method &ldquo;tvOLS&rdquo; is performed.<br/></li>
+<li>&ldquo;tvFGLS&rdquo; to estimate the coefficients of the system using an estimated time-varying variance-covariance matrix. By default, only one iteration is performed in the 
+estimation of \(\Sigma\), unless <em>control</em> variable indicates otherwise. The user can choose the maximum number of iterations or the level of tolerance in the estimation of \(\Sigma\). See example below for details.</li>
+</ol>
+
+<pre><code class="r">## Iterative FGLS estimation - SUR estimation
+fgls2.fit &lt;- systemfit::systemfit(system, data = Kmenta, method = &quot;SUR&quot;, maxit = 100)
+
+## Iterative tvFGLS estimation - SURE estimation using the local linear
+tvfgls2.fit &lt;- tvSURE(system, data = Kmenta, method = &quot;tvFGLS&quot;, control = list(tol = 0.001, 
+    maxiter = 100))
+</code></pre>
+
+<h3>Coefficient restrictions</h3>
+
+<p>The user can restrict certain coefficients using parameters <em>R</em> and <em>r</em>. Note that the restriction is setting those coefficients to a constant. An illustration of this usage in the example below.</p>
+
+<pre><code class="r">## Estimation with 2 restrictions
+Rrestr &lt;- matrix(0, 2, 7)
+Rrestr[1, 3] &lt;- 1
+Rrestr[1, 7] &lt;- -1
+Rrestr[2, 2] &lt;- -1
+Rrestr[2, 5] &lt;- 1
+qrestr &lt;- c(0, 0.5)
+tvfgls.rest &lt;- tvSURE(system, data = Kmenta, method = &quot;tvFGLS&quot;, R = Rrestr, 
+    r = qrestr, bw = tvfgls1.fit$bw, bw.cov = tvfgls1.fit$bw.cov)
+</code></pre>
+
+<h1>Estimating a time-varying variance-covariance matrix</h1>
+
+<p>A time-varying covariance matrix of two or more series can be estimated using function <em>tvCov</em> as in the example below. This is the function used by <em>tvVAR</em> and <em>tvSURE</em> to calculate a time-varying variance-covariance matrix of the error term.</p>
+
+<pre><code class="r">library(MASS)
+## Generate two independent (uncorrelated) series
+y &lt;- cbind(rnorm(200, sd = 4), rnorm(200, sd = 1))
+## Calculate the bandwidth
+bw.cov &lt;- bwCov(y)
+## Estimate variance-variance matrix
+Sigma.hat &lt;- tvCov(y, bw = bw.cov)
+## The first time point estimate
+print(Sigma.hat[, , 1])
+</code></pre>
+
+<pre><code>##            [,1]      [,2]
+## [1,] 17.2244485 0.2765329
+## [2,]  0.2765329 0.9324670
+</code></pre>
+
+<pre><code class="r">## The mean over time of all estimates
+print(apply(Sigma.hat, 1:2, mean))
+</code></pre>
+
+<pre><code>##            [,1]      [,2]
+## [1,] 17.2244279 0.2765606
+## [2,]  0.2765606 0.9324577
+</code></pre>
+
+<pre><code class="r">## Generate two dependent variables with a covariance of -0.5
+y &lt;- mvrnorm(n = 200, mu = c(0, 0), Sigma = cbind(c(1, -0.5), c(-0.5, 4)))
+## Calculate the bandwidth
+bw.cov &lt;- bwCov(y)
+## Estimation the variables variance-covariance matrix
+Sigma.hat &lt;- tvCov(y, bw = bw.cov)
+## The first time point estimate
+print(Sigma.hat[, , 1])
+</code></pre>
+
+<pre><code>##            [,1]       [,2]
+## [1,]  0.9582406 -0.5056756
+## [2,] -0.5056756  3.4026960
+</code></pre>
+
+<h1>Confidence intervals</h1>
+
+<p>Package <em>tvReg</em> calculates the confidence intervals of objects of class <em>tvlm</em>, <em>tvar</em>, <em>tvsure</em> and <em>tvirf</em> with function <em>CI</em>. Parameter <em>level</em> is set to 0.95 (95% confidence interval) by default. If this parameter is chosen to be a number between 0 and 1, then a number of <em>runs</em> resamples is used in the confidence interval calculation. Because coefficients are time-varying, only wild bootstrap residual resampling is possible. Two choices of wildbootstrap are available in parameter <em>tboot</em>, the Mammen (1993) (default) and the one using the normal distribution (tboot =&ldquo;wild2&rdquo;). </p>
+
+<p>Note that if the input model in function <em>CI</em> is the same than the output model, the calculation of following confidence intervals will be faster as the results from replications are stored in variable <em>BOOT</em>.</p>
+
+<pre><code class="r">## Obtain the 90% confidence interval of the coefficients for an object of
+## class tvlm
+model.tvlm.90 &lt;- CI(model.tvlm, level = 0.9, runs = 50)
+
+## Obtain the 95% confidence interval of the same object. This will reused
+## the resamples of object model.tvlm done previously. So the second
+## confidence interval calculation is faster
+model.tvlm.95 &lt;- CI(model.tvlm.90)
+
+## 80% confidence interval using normal wild bootstrap for object of class
+## tvar with 200 bootstrap resamples
+model.tvAR.ci &lt;- CI(model.tvAR.1p.z, tboot = &quot;wild2&quot;, level = 0.8, runs = 50)
+
+## 95% confidence interval using Mammen&#39;s wild bootstrap for object of class
+## tvirf
+model.tvIRF &lt;- CI(model.tvIRF)
+
+## 50% confidence interval using Mammen&#39;s wild bootstrap for object of class
+## tvsure
+tvols.fit &lt;- CI(tvols.fit, level = 0.5)
+</code></pre>
+
+<h1>Plot</h1>
+
+<p>There is a plot function for objects of the five classes in this package: <em>tvlm</em>, <em>tvar</em>, <em>tvvar</em>, <em>tvsure</em> and <em>tvirf</em>. The variable coefficients estimates, as well as if confidence intervals if calculated, are plotted for classes <em>tvlm</em>, <em>tvar</em>, <em>tvsure</em> and <em>tvirf</em>. The fitted values and the residuals are plotted for class <em>tvvar</em> because the interpretation of its coefficients is not relevant. </p>
+
+<pre><code class="r">## Plot coefficient estimates and confidence intervals (if calculated) of
+## objects of class tvlm
+plot(model.tvlm.90)
+
+## Plot coefficient estimates of objects of class tvar.
+plot(model.tvAR.ci)
+
+## Plot the fitted values and residuals of each equation in the model
+plot(model.tvVAR)
+
+## Plot the mean all tvIRF over time
+plot(model.tvIRF)
+
+## Plot the effect of a shock in the interest rates (tbi) on the inflation
+## (inf) at time 100
+plot(model.tvIRF, obs.index = 100, impulse = &quot;tbi&quot;, response = &quot;inf&quot;)
+
+## Plot the cumulative effect on a shock in short term interest rates (tbi)
+## on the inflation (inf)
+plot &lt;- plot(model.tvIRF2, impulse = &quot;tbi&quot;, response = &quot;inf&quot;)
+
+## Plot coefficient estimates and confidence intervals (if calculated) of
+## objects of class tvsure
+plot(tvols.fit)
+</code></pre>
+
+</body>
+
+</html>
