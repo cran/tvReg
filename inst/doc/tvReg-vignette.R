@@ -175,22 +175,22 @@ print(Sigma.hat[, , 1])
 
 ## ----eval = FALSE--------------------------------------------------------
 #  ##Obtain the 90% confidence interval of the coefficients for an object of class tvlm
-#  model.tvlm.90 <- CI (model.tvlm, level = 0.90, runs = 50)
+#  model.tvlm.90 <- confint (model.tvlm, level = 0.90, runs = 50)
 #  
 #  ##Obtain the 95% confidence interval of the same object. This will reused the resamples
 #  ##of object model.tvlm done previously. So the second confidence interval calculation
 #  ##is faster
-#  model.tvlm.95 <- CI(model.tvlm.90)
+#  model.tvlm.95 <- confint(model.tvlm.90)
 #  
 #  ##80% confidence interval using normal wild bootstrap for object of class tvar
 #  ##with 200 bootstrap resamples
-#  model.tvAR.ci <- CI(model.tvAR.1p.z, tboot = "wild2", level = 0.8, runs = 50)
+#  model.tvAR.ci <- confint(model.tvAR.1p.z, tboot = "wild2", level = 0.8, runs = 50)
 #  
 #  ##95% confidence interval using Mammen's wild bootstrap for object of class tvirf
-#  model.tvIRF <- CI(model.tvIRF)
+#  model.tvIRF <- confint(model.tvIRF)
 #  
 #  ##50% confidence interval using Mammen's wild bootstrap for object of class tvsure
-#  tvols.fit <- CI(tvols.fit, level = 0.5)
+#  tvols.fit <- confint(tvols.fit, level = 0.5)
 
 ## ----eval = FALSE--------------------------------------------------------
 #  ##Plot coefficient estimates and confidence intervals (if calculated) of objects of class tvlm

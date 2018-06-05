@@ -1,7 +1,11 @@
 ---
 title: 'tvReg: Time-Varying Coefficients Linear Regression for Single and Multiple
   Equations'
-author: "Isabel Casas & Ruben Fernandez-Casal"
+author:
+- name: Isabel Casas
+  affiliation: Basque Center for Applied Mathematics and The University of Southern Denmark.
+- name: Ruben Fernandez-Casal
+  affiliation: University of A Coruna
 date: '`r Sys.Date()`'
 output: rmarkdown::html_vignette
 vignette: >
@@ -10,7 +14,8 @@ vignette: >
   %\usepackage[UTF-8]{inputenc}
   
 abstract: "The source code of the *tvReg* package is publicly available
-for download from the RtvSURE*, *tvVAR* and *tvIRF*. Moreover, this package provides tools for the graphical display of results, extraction of residuals fitted values, bandwidth calculation, estimation of the time-varying variance-covariance matrix of the error term and two estimation procedure: the time-varying ordinary least squares programmed in function *tvOLS* and the time-varying generalised least squares in function *tvGLS*."
+for download from the Comprehensive *R* Archive Network (CRAN,
+https://CRAN.R-project.org/). The five basic functions in this package are *tvLM*, *tvAR*, *tvSURE*, *tvVAR* and *tvIRF*. Moreover, this package provides tools for the graphical display of results, extraction of residuals fitted values, bandwidth calculation, estimation of the time-varying variance-covariance matrix of the error term and two estimation procedure: the time-varying ordinary least squares programmed in function *tvOLS* and the time-varying generalised least squares in function *tvGLS*."
 
 ---
 
@@ -361,28 +366,28 @@ print(Sigma.hat[, , 1])
 
 
 # Confidence intervals
-Package *tvReg* calculates the confidence intervals of objects of class *tvlm*, *tvar*, *tvsure* and *tvirf* with function *CI*. Parameter *level* is set to 0.95 (95% confidence interval) by default. If this parameter is chosen to be a number between 0 and 1, then a number of *runs* resamples is used in the confidence interval calculation. Because coefficients are time-varying, only wild bootstrap residual resampling is possible. Two choices of wildbootstrap are available in parameter *tboot*, the Mammen (1993) (default) and the one using the normal distribution (tboot ="wild2"). 
+Package *tvReg* calculates the confidence intervals of objects of class *tvlm*, *tvar*, *tvsure* and *tvirf* with function *confint*. Parameter *level* is set to 0.95 (95% confidence interval) by default. If this parameter is chosen to be a number between 0 and 1, then a number of *runs* resamples is used in the confidence interval calculation. Because coefficients are time-varying, only wild bootstrap residual resampling is possible. Two choices of wildbootstrap are available in parameter *tboot*, the Mammen (1993) (default) and the one using the normal distribution (tboot ="wild2"). 
 
-Note that if the input model in function *CI* is the same than the output model, the calculation of following confidence intervals will be faster as the results from replications are stored in variable *BOOT*.
+Note that if the input model in function *confint* is the same than the output model, the calculation of following confidence intervals will be faster as the results from replications are stored in variable *BOOT*.
 
 ```{r eval = FALSE}
 ##Obtain the 90% confidence interval of the coefficients for an object of class tvlm
-model.tvlm.90 <- CI (model.tvlm, level = 0.90, runs = 50)
+model.tvlm.90 <- confint (model.tvlm, level = 0.90, runs = 50)
 
 ##Obtain the 95% confidence interval of the same object. This will reused the resamples
 ##of object model.tvlm done previously. So the second confidence interval calculation 
 ##is faster
-model.tvlm.95 <- CI(model.tvlm.90)
+model.tvlm.95 <- confint(model.tvlm.90)
 
 ##80% confidence interval using normal wild bootstrap for object of class tvar
 ##with 200 bootstrap resamples 
-model.tvAR.ci <- CI(model.tvAR.1p.z, tboot = "wild2", level = 0.8, runs = 50)
+model.tvAR.ci <- confint(model.tvAR.1p.z, tboot = "wild2", level = 0.8, runs = 50)
 
 ##95% confidence interval using Mammen's wild bootstrap for object of class tvirf
-model.tvIRF <- CI(model.tvIRF)
+model.tvIRF <- confint(model.tvIRF)
 
 ##50% confidence interval using Mammen's wild bootstrap for object of class tvsure
-tvols.fit <- CI(tvols.fit, level = 0.5)
+tvols.fit <- confint(tvols.fit, level = 0.5)
 ```
 
 
@@ -415,5 +420,7 @@ plot <- plot(model.tvIRF2, impulse ="tbi", response = "inf")
 ##of class tvsure
 plot(tvols.fit)
 ```
+# Other tvReg methods
 
+There are *summary* and *print* functions for objects in this package. In addition, methods *coef* and *residuals* have been included.
 

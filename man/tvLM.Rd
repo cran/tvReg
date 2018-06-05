@@ -63,7 +63,6 @@ A formula has an implied intercept term. To remove this use either
 y ~ x - 1 or y ~ 0 + x.
 }
 \examples{
-\donttest{
 ## Simulate a linear process with time-varying coefficient
 ## as functions of scaled time.
 
@@ -79,22 +78,37 @@ data <-data.frame(y = y, X1 = X1, X2 = X2)
 
 coef.lm <- stats::lm(y ~ 0 + X1 + X2, data = data)$coef
 model.tvlm <- tvLM(y ~ 0 + X1 + X2, data = data, bw = 0.2)
-}
+
+## Estimate coefficients of different realized variance models
+data("RV")
+##Bollerslev et al. (2016) SHARQ model
+SHARQ <- lm (RVt ~ RVt_1_pos + RVt_1_neg + I(RVt_1_pos * RQt_1_sqrt) +
+I(RVt_1_neg * RQt_1_sqrt) + RVt_1_5 + RVt_1_22, data = tail(RV, 2000))
+
+#Casas et al. (2018) tvSHARQ model
+tvSHARQ <- tvLM (RVt ~ RVt_1_pos + RVt_1_neg + RVt_1_5 + RVt_1_22, 
+z = tail(RV$RQt_1_sqrt, 2000), data = tail(RV, 2000), bw = 0.002)
+
+boxplot(data.frame(tvSHARQ = tvSHARQ$tvcoef[,2],
+SHARQ = SHARQ$coef[2]+ SHARQ$coef[4] * tail(RV$RQt_1_sqrt, 2000)),
+main = expression (RV[t-1]^{"+"}), outline = FALSE)
+boxplot(data.frame(tvSHARQ = tvSHARQ$tvcoef[,3], 
+SHARQ = SHARQ$coef[3]+ SHARQ$coef[5] * tail(RV$RQt_1_sqrt, 2000)),
+main = expression (RV[t-1]^{"-"}), outline = FALSE)
 
 }
 \references{
-Cai, Z., Li, Q., Park, J. Y. (2009) Functional-coefficient models for nonstationary 
-time series data, \emph{Journal of Econometrics}, Volume 148, pp. 101-113.
+Bollerslev, T., Patton, A. J. and Quaedvlieg, R. (2016) Exploiting the 
+errors: A simple approach for improved volatility forecasting. 
+\emph{Journal of Econometrics}, 192, 1-18.
 
-Robinson, P. (1989) Nonparametric estimation of time-varying parameters.  In
-Hackl, P., editor, \emph{Statistical Analysis and Forecasting of Economic Structural
-Change}. Springer, Berlin.
+Casas, I., Mao, X. and Vega, H. (2018) Reexamining financial and economic 
+predictability with new estimators of realized variance and variance 
+risk premium. Url= http://pure.au.dk/portal/files/123066669/rp18_10.pdf
 }
 \seealso{
-\code{\link{CI}}, \code{\link{plot}}
-
-\code{\link{bw}} for bandwidth selection, \code{\link{tvOLS}} for the
-estimation procedure and \code{\link{CI}} for confidence intervals.
+\code{\link{bw}}, \code{\link{tvAR}}, \code{\link{confint}}, 
+\code{\link{plot}}, \code{\link{print}} and \code{\link{summary}}
 }
 \keyword{coefficients}
 \keyword{linear}

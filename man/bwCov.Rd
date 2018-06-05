@@ -31,6 +31,6 @@ data(CEES)
 ## Using a shorter set for a quick example
 mydata <- tail (CEES, 50)
 bw.cov <- bwCov(mydata)
-Sigma.hat <-  tvCov(mydata, bw = bw.cov)
+Sigma.hat <- tvCov(mydata, bw = bw.cov)
 
 }

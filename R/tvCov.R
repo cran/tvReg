@@ -2,6 +2,9 @@
 #'
 #' Estimation of a time-varying variance-covariance matrix using the local constant or the local linear kernel
 #' smoothing methodologies.
+#' 
+#' @references Aslanidis, N. and Casas, I (2013) Nonparametric correlation models for portfolio
+#' allocation. \emph{Journal of Banking \& Finance}, 37, 2268-2283
 #'
 #' @importFrom MASS mvrnorm
 #' @param x A matrix.
@@ -10,9 +13,9 @@
 #' @param tkernel A character, either "Gaussian" or "Epa" kernel types.
 #'
 #' @return A matrix of dimension obs x neq x neq.
+#' 
+#' @seealso \code{\link{bwCov}}
 #'
-#' @references Aslanidis, N. and Casas, I (2013) Nonparametric correlation models for portfolio
-#' allocation. \emph{Journal of Banking \& Finance}, 37, 2268-2283
 #' @examples
 #' ##Generate two independent (uncorrelated series)
 #' y <- cbind(rnorm(100, sd = 4), rnorm(100, sd = 1))
@@ -39,11 +42,15 @@
 tvCov <- function(x, bw, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"))
 {
   x <- as.matrix(x)
-  obs <- nrow(x)
-  neq <- ncol(x)
+  obs <- NROW(x)
+  neq <- NCOL(x)
   tkernel <- match.arg(tkernel)
+  if(!(tkernel %in% c("Epa", "Gaussian")))
+    tkernel <- "Epa"
   est <- match.arg(est)
-  Sigma <- array(0, dim = c(neq,neq, obs))
+  if(!(est %in% c("lc", "ll")))
+    est <- "lc"
+  Sigma <- array(0, dim = c(neq, neq, obs))
   resid.2 <- numeric(obs)
   if(length(bw) > 1)
     bw <- stats::median(bw)
@@ -51,7 +58,7 @@ tvCov <- function(x, bw, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"))
   for (t in 1:obs)
   {
     x2 <- (time.grid - t)/obs
-    kernel.bw <- .kernel(x2,bw, tkernel = tkernel)/bw
+    kernel.bw <- .kernel(x2, bw, tkernel = tkernel)/bw
     w0 <- sum(kernel.bw)
     r.2 <- matrix(0, neq, neq)
     if(est == "lc")
@@ -89,18 +96,23 @@ tvCov <- function(x, bw, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"))
 .tvCov.cv <- function(bw, x, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"))
 {
   x <- as.matrix(x)
-  obs <- nrow(x)
-  neq <- ncol(x)
+  obs <- NROW(x)
+  neq <- NCOL(x)
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
+  if(!(tkernel %in% c("Epa", "Gaussian")))
+    tkernel <- "Epa"
+  if(!(est %in% c("lc", "ll")))
+    est <- "lc"
   Sigma <-  array(0, dim = c(neq, neq, obs))
   resid.2 <- numeric(obs)
-  if(length(bw)>1) bw <- stats::median(bw)
+  if(length(bw)>1) 
+    bw <- stats::median(bw)
   time.grid <- 1:obs
   for (t in 1:obs)
   {
     x2 <- (time.grid-t)/obs
-    kernel.bw <- .kernel(x2,bw,tkernel = tkernel)/bw
+    kernel.bw <- .kernel(x2, bw, tkernel = tkernel)/bw
     kernel.bw[t] <- 0
     w0 <- sum(kernel.bw)
     r.2 <- matrix(0, neq, neq)

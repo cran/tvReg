@@ -32,21 +32,27 @@ tvOLS <- function(x, y, z = NULL, bw, est = c("lc", "ll"),
 {
   x <- as.matrix(x)
   y <- as.numeric(y)
+  obs <- NROW(x)
+  if(!identical(length(y), obs))
+    stop("\nDimensions of 'x' and 'y' are not compatible.\n")
   if(!is.numeric(bw))
-    stop ("Parameter bw should be a scalar. \n")
+    stop ("Parameter 'bw' should be a scalar. \n")
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
-  if(tkernel != "Epa" & tkernel != "Gaussian")
+  if(!(tkernel %in% c("Epa", "Gaussian")))
     tkernel <- "Epa"
-  if(est != "lc" & est != "ll")
+  if(!(est %in% c("lc", "ll")))
     est <- "lc"
-  obs <- nrow(x)
   fitted <- numeric(obs)
   resid <- numeric(obs)
-  nvar <- ncol(x)
+  nvar <- NCOL(x)
   theta <- matrix(0, obs, nvar)
   if(!is.null(z))
+  {
+    if(length(z) != obs)
+      stop("\nDimensions of 'x' and 'z' are not compatible\n")
     grid <- z
+  }
   else
     grid <- (1:obs)/obs
   for (t in 1:obs)
@@ -77,14 +83,24 @@ tvOLS <- function(x, y, z = NULL, bw, est = c("lc", "ll"),
                       tkernel = c("Epa", "Gaussian"), singular.ok = TRUE)
 {
   x <- as.matrix(x)
-  obs <- nrow(x)
+  obs <- NROW(x)
+  if(!identical(length(y), obs))
+    stop("\nDimensions of 'x' and 'y' are not compatible\n")
   fitted <- resid.2 <- numeric(obs)
-  nvar <- ncol(x)
+  nvar <- NCOL(x)
   bw <- abs(bw)
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
+  if(!(tkernel %in% c("Epa", "Gaussian")))
+    tkernel <- "Epa"
+  if(!(est %in% c("lc", "ll")))
+    est <- "lc"
   if(!is.null(z))
+  {
+    if(length(z) != obs)
+      stop("\nDimensions of 'x' and 'z' are not compatible\n")
     grid <- z
+  }
   else
     grid <- (1:obs)/obs
   theta <- matrix(0, obs, nvar)

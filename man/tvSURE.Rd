@@ -114,6 +114,25 @@ and \eqn{\beta_{t} = \left(\beta _{1t}', \ldots, \beta _{neq t}'\right)'} is a v
 total number of variables in the system. The error vector \eqn{u_{t} = (u_{1t}, u_{2t}, \ldots, u_{neq t})'}
 has zero mean and  covariance matrix \eqn{E(u_t u_t') = \Sigma_t}.
 }
+\examples{
+\dontrun{
+data("Kmenta", package = "systemfit")
+eqDemand <- consump ~ price + income
+eqSupply <- consump ~ price + farmPrice + trend
+system <- list(demand = eqDemand, supply = eqSupply)
+
+##OLS estimation of a system
+ols.fit <- systemfit::systemfit(system, method = "OLS", data = Kmenta)
+##tvOLS estimation of a system with the local linear estimator
+tvols.fit <- tvSURE(system, data = Kmenta,  est = "ll")
+
+##SUR estimation
+fgls1.fit <- systemfit::systemfit(system, data = Kmenta, method = "SUR")
+##tvSURE estimation
+tvfgls1.fit <- tvSURE(system, data = Kmenta, method = "tvFGLS")
+}
+
+}
 \references{
 Casas, I., Ferreira, E., and Orbe, S. (2017) Time-Varying Coefficient Estimation 
 in SURE Models: Application to Portfolio Management. Available at SSRN: 
@@ -133,12 +152,8 @@ Orbe, S., Ferreira, E., and Rodriguez-Poo, J (2004) On the estimation and testin
 time varying constraints in econometric models, \emph{Statistica Sinica}.
 }
 \seealso{
-\code{\link{systemfit}}
-
-\code{\link{CI}}, \code{\link{plot}}
-
-\code{\link{bw}} for bandwidth calculation, \code{\link{tvGLS}} for nonparametric
-estimator and \code{\link{CI}} for confidence intervals.
+\code{\link{bw}}, \code{\link{tvCov}},  \code{\link{tvVAR}}, 
+\code{\link{confint}}, \code{\link{plot}}, \code{\link{print}} and \code{\link{summary}}
 }
 \keyword{models,}
 \keyword{nonparametric}

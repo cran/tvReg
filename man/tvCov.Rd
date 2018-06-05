@@ -47,3 +47,6 @@ print(Sigma.hat[,,1])
 Aslanidis, N. and Casas, I (2013) Nonparametric correlation models for portfolio
 allocation. \emph{Journal of Banking \& Finance}, 37, 2268-2283
 }
+\seealso{
+\code{\link{bwCov}}
+}
