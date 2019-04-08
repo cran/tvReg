@@ -28,10 +28,10 @@ input the intercept.}
 \item{newy}{A vector with new values of the response variable}
 
 \item{newexogen}{A matrix or vector with the new value of the exogenous variables.
-Only for predictions of *tvar* and *tvvar* objects.}
+Only for predictions of 'tvar' and 'tvvar' objects.}
 
 \item{newdata}{A dataframe with new values of all regressors, with the
-same name and order as they appear in argument *data* from the *tvsure* 
+same name and order as they appear in argument 'data' from the 'tvsure'
 object}
 }
 \value{
