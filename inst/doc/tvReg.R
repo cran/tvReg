@@ -50,14 +50,14 @@ plot(model.tvLM.90)
  
  ##Coefficients estimation
  coef.lm <- stats::lm(y ~ 0 + X1 + X2, data = data)$coef
- model.tvLM2 <- tvLM(y ~ 0 + X1 + X2, z = z, data = data, bw = 0.4, est = "ll")
+ model.tvLM2 <- tvLM(y ~ 0 + X1 + X2, z = z, data = data, cv.block = 50, est = "ll")
  
  ##Plotting the estimates of beta1
  sort.index <- sort.int(z, index.return = TRUE)$ix
  par (mar = c(4,4,1,1), oma = c(1,1,1,1))
  plot(z[sort.index], beta[sort.index, 1], type = "l", main = "",
  ylab = expression(beta[1]), xlab = expression(z[t]),
- ylim = range(beta[,1], model.tvLM2$tvcoef[, 1]))
+ ylim = range(beta[,1], coefficients(model.tvLM2)[, 1]))
  abline(h = coef.lm[1], col = 2)
  lines(z[sort.index], model.tvLM2$tvcoef[sort.index, 1], col = 4)
  legend("top", c(expression(beta[1]), "lm", "tvLM"), col = c(1, 2, 4), bty = "n", 
@@ -234,7 +234,7 @@ tvHAR <- with(RV2, tvAR (RV, p = 1, bw = 20, exogen = cbind(RV_week, RV_month)))
 ##Define the forecast horizon (n.ahead) and the future values of the exogenous variables
 newexogen <- cbind(RV$RV_week[2002:2004], RV$RV_month[2002:2004])
 ##3-step-ahead forecast
-forecast(tvHAR, n.ahead = 3, newexogen)
+forecast(tvHAR, n.ahead = 3, newexogen = newexogen)
 
 ## ----Predict, eval = TRUE------------------------------------------------
 tvHARQ <- with(RV2, tvLM (RV ~ RV_lag + RV_week + RV_month, z = RQ_lag_sqrt, 
