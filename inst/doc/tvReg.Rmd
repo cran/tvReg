@@ -242,7 +242,7 @@ The example below uses the simulated variable *Y* from above and fits a TVAR(6),
 ```
 
 
-# Multi-equation linear models: the TVSURE and TVVAR models 
+# Multi-equation linear models
 
 The formula of systems of linear models can be generally express as in (1) with $y_t = (y_{1t}, y_{2t}, \ldots, y_{Mt})'$ for $M$ the number of equations in the system. Similarly, the error term $u_t =(u_{1t}, u_{2t}, \ldots, u_{Mt})'$ and the $\Sigma_t$ is the variance-covariance matrix that defines the dependency of the error terms of all equations. Variables $X_t$ and $\beta_t$ are matrices. 
 

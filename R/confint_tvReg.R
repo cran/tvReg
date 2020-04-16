@@ -353,7 +353,7 @@ confint.tvplm <- function(object, parm, level = 0.95,
   z <- x$z
   ez <- x$ez
   R <- x$R
-  r <- x$R
+  r <- x$r
   if(!is.null(z))
     grid <- z
   else
@@ -501,7 +501,7 @@ confint.tvplm <- function(object, parm, level = 0.95,
         BOOT[[k]] <- rbind (BOOT[[k]], theta[t,])
       }
     }
-    }
+  }
   return(BOOT)
 }
 
