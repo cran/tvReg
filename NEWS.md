@@ -1,10 +1,16 @@
+#tvReg 0.5.2
+
+* Fix bug in `tvPLM` and change the limits of the Epanechnikov kernel.
+* Control for variables size in `tvPLM` when there are NAs
+* Control for class in `tvAR` main argument
+
 #tvReg 0.5.1
 
 * Fix bug in method `tvSURE` when using constraints. Method `confint` works.
 
 #tvReg 0.5.0
 
-* Added methods `tvPLM`, `tvFE` and `tvRE` methods to fit time-varying coefficients panel data models. Also added their corresponding`confint`, `predict`, `forecast`, `plot`, `summary` and `print` methods.
+* Added methods `tvPLM`, `tvRE` and `tvFE` and methods to fit time-varying coefficients panel data models. Also added their corresponding`confint`, `predict`, `forecast`, `plot`, `summary` and `print` methods.
 
 * Added dataset OECD
 

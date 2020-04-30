@@ -41,7 +41,7 @@ bw <- function(x, ...)  UseMethod("bw", x)
 bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"),
                        singular.ok = TRUE, ...)
 {
-  if(!is.matrix(x) & !is.data.frame(x) & !is.numeric(x) & !is.vector(x))
+  if(!inherits(x, c("matrix", "data.frame", "vector", "numeric", "integer")))
     stop("'x' should be a matrix, a vector or a data frame. \n")
   if(is.null(y))
     stop("Parameter 'y' missing. \n")
@@ -58,7 +58,7 @@ bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkerne
     stop("The number of equations in 'x' and 'y' are different \n")
   if(is.null(z))
   {
-    upper <- 5
+    upper <- 20
     lower <- 5/obs
     top <- 1
   }
@@ -80,6 +80,8 @@ bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkerne
       {
         value <- 0
         bw[j] <- top
+        warning("Maximum number of iterations reached in bandwidth calculation: either the function
+            is constant, no convergence of bandwidth, or cv.block is too big. \n")
         break()
       }
       result <- try(stats::optim(stats::runif(1, lower, top), .tvOLS.cv, method = "Brent",
@@ -102,9 +104,6 @@ bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkerne
       iter <- iter + 1
     }
   }
-  if(iter == 10)
-    warning("Maximum number of iterations reached in bandwidth calculation: either the function
-            is constant, no convergence of bandwidth, or cv.block is too big. \n")
   return(bw)
 }
 
@@ -150,7 +149,7 @@ bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel =
   cv.block <- floor(abs(cv.block))
   if(is.null(z))
   {
-    upper <- 2
+    upper <- 20
     lower <- 5/obs
     top <- 0.5
   }
@@ -171,6 +170,8 @@ bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel =
       {
         value <- 0
         bw[j] <- 100
+        warning("Maximum number of iterations reached in bandwidth calculation: either the function
+            is constant, or no convergence of bandwidth. \n")
         break()
       }
       result <- try(stats::optim(stats::runif(1, lower, top), .tvOLS.cv, 
@@ -193,9 +194,6 @@ bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel =
       iter <- iter + 1
     }
   }
-  if(iter == 10)
-    warning("Maximum number of iterations reached in bandwidth calculation: either the function
-            is constant, or no convergence of bandwidth. \n")
   return(bw)
 }
 #' @rdname bw
@@ -270,6 +268,8 @@ bw.tvplm <- function(x, ...)
     {
       value <- 0
       bw <- 100
+      warning("Maximum number of iterations reached in bandwidth calculation: either the function
+              is constant, or no convergence of bandwidth. \n")
       break()
     }
     if (method != "within")
@@ -298,9 +298,6 @@ bw.tvplm <- function(x, ...)
     }
     iter <- iter + 1
   }
-  if(iter == 10)
-    warning("Maximum number of iterations reached in bandwidth calculation: either the function
-              is constant, or no convergence of bandwidth. \n")
   return(abs(bw))  
 }
 
@@ -324,7 +321,6 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
                   est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"), ...)
 {  
   dimen <- plm::pdim(x)
-  obs <- dimen$nT$N
   neq <- dimen$nT$n
   obs <- dimen$nT$T
   y <- stats::model.extract(x, "response")
@@ -360,6 +356,8 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
     {
       value <- 0
       bw <- top
+      warning("Maximum number of iterations reached in bandwidth calculation: either the function
+            is constant, or no convergence of bandwidth. \n")
       break()
     }
 
@@ -389,10 +387,6 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
     }
     iter <- iter + 1
   }
-  if(iter == 10)
-    warning("Maximum number of iterations reached in bandwidth calculation: either the function
-            is constant, or no convergence of bandwidth. \n")
-
   return(abs(result$par))  
 }
 
@@ -432,7 +426,9 @@ bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Epa", "Gaus
     if(iter == 10)
     {
       value <- 0
-      bw <- 100
+      bw <- 20
+      warning("Maximum number of iterations reached in bandwidth calculation: either the function
+            is constant, or no convergence of bandwidth. \n")
       break()
     }
     result <- try(stats::optim(stats::runif(1, 5/obs, 1), .tvCov.cv, method = "Brent",
@@ -448,9 +444,6 @@ bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Epa", "Gaus
     }
     iter <- iter + 1
   }
-  if (iter == 10)
-    warning("Maximum number of iterations reached in bandwidth calculation: either the function
-            is constant, or no convergence of bandwidth. \n")
   return(bw)
 }
 

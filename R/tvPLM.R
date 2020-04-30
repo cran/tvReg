@@ -117,7 +117,6 @@ tvPLM <- function (formula, z = NULL, ez = NULL, data, index = NULL, bw = NULL, 
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
   mf <- match.call(expand.dots = FALSE)
-  mf$na.action <- as.name("na.pass")
   m <- match(c("formula", "data"), names(mf), 0L)
   mf <- mf[c(1L, m)]
   mf$drop.unused.levels <- TRUE
@@ -130,8 +129,12 @@ tvPLM <- function (formula, z = NULL, ez = NULL, data, index = NULL, bw = NULL, 
   terms <- attr(data, "terms")
   y <- stats::model.extract(data, "response")
   if (stats::is.empty.model(data))
-    stop ("No regressors in the model. \n")
+    stop ("\nNo regressors in the model. \n")
+  if(length(y) != neq*obs)
+    stop("\nNAs in the dependent variable. \n")
   x <- stats::model.matrix(terms, data)
+  if(dim(x)[1] != neq*obs)
+    stop("\nNAs in the regressors. \n")
   var.names <- colnames(x)
   nvar <- length(var.names)
   if(is.null(bw))

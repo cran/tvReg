@@ -88,14 +88,17 @@
 tvAR <- function (y, p = 1, z = NULL, ez = NULL, bw = NULL, cv.block = 0, type = c("const", "none"), exogen = NULL,
                   fixed = NULL, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"), singular.ok = TRUE)
 {
+  if(!is.null(dim(y)))
+    stop("\nWrong dimension of 'y', it should be a vector.")
   if (any(is.na(y)))
-    stop("\nNAs in y.\n")
-  if (p < 1)
-    stop("p should be a positive number. \n")
+    stop("\nNAs in 'y'.\n")
+  if (p < 1 | p >= length(y))
+    stop("\nWrong value in 'p'. \n")
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
   type <- match.arg(type)
   y.orig <- y
+  y <- as.vector(y)
   obs <- length(y)
   sample <- obs - p
   ylags <- as.matrix(stats::embed(y, dimension = p + 1))

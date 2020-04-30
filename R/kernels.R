@@ -10,7 +10,7 @@
 #' @keywords internal
 .kernel <- function(x, bw, tkernel = "Epa")
 {
-  x <- x/bw
+  x <- x/c(bw)
   value <- numeric(length(x))
   if (tkernel == "Gaussian")
   {
@@ -18,9 +18,8 @@
   }
   else if(tkernel == "Epa")
   {
-    index <- (x >= -0.5 & x <= 0.5)
-    value[index] <- 1.09090909090909082834741639089770615100860595703125 * (1 - x[index]^2) #12/11
+    index <- (x>=-1 & x<=1)
+    value[index] <- 0.75 * (1 - x[index]^2)
   }
   return(value)
-
 }
