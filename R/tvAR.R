@@ -64,9 +64,9 @@
 #' print(TVCHAR)
 #' 
 #' ##Casas et al (2018) TVHARQ model
-#' tvHARQ <- tvAR (RV, p = 1, exogen = cbind (RV_week, RV_month), 
+#' TVHARQ <- tvAR (RV, p = 1, exogen = cbind (RV_week, RV_month), 
 #' z=RQ, bw = 0.0062)
-#' print(tvHARQ)
+#' print(TVHARQ)
 #' 
 #' @aliases tvar-class tvar
 #' @references

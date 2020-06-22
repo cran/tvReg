@@ -402,8 +402,8 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
 #' @examples
 #'
 #' data(CEES)
-#' ## Using a shorter set for a quick example
-#' mydata <- tail (CEES, 50)
+#' ## Using a shorter set for a quick example. Variable "Date" is removed.
+#' mydata <- tail (CEES[, -1], 50)
 #' bw.cov <- bwCov(mydata)
 #' Sigma.hat <- tvCov(mydata, bw = bw.cov)
 #'

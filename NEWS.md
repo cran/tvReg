@@ -1,3 +1,8 @@
+#tvReg 0.5.3
+
+* Add dates in data `CEES`
+* Change argument 'newx' for argument 'newdata' in forecast.tvlm, forecast.tvar, predict.tvlm and predict.tvar.
+
 #tvReg 0.5.2
 
 * Fix bug in `tvPLM` and change the limits of the Epanechnikov kernel.

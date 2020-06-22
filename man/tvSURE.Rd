@@ -144,15 +144,15 @@ eqSupply2 <- consump ~  price + farmPrice
 system2 <- list(demand = eqDemand, supply = eqSupply2)
 
 ##OLS estimation of a system
-ols.fit <- systemfit::systemfit(system, method = "OLS", data = Kmenta)
+OLS <- systemfit::systemfit(system, method = "OLS", data = Kmenta)
 ##tvOLS estimation of a system with the local linear estimator
 ##removing trend because it is included in the intercept changing over time
-tvols.fit <- tvSURE(system2, data = Kmenta,  est = "ll")
+TVOLS <- tvSURE(system2, data = Kmenta,  est = "ll")
 
-##SUR estimation
-fgls1.fit <- systemfit::systemfit(system, data = Kmenta, method = "SUR")
+##SUR/FGLS estimation
+FGLS <- systemfit::systemfit(system, data = Kmenta, method = "SUR")
 ##tvSURE estimation
-tvfgls1.fit <- tvSURE(system, data = Kmenta, method = "tvFGLS")
+TVFGLS <- tvSURE(system, data = Kmenta, method = "tvFGLS")
 }
 
 }

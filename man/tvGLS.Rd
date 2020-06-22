@@ -104,6 +104,6 @@ FF5F$EU.SMALL.LoBM)
 ##Excess returns
 y <- y - cbind(FF5F$NA.RF, FF5F$JP.RF, FF5F$AP.RF, FF5F$EU.RF)
 ##I fit the data with one bandwidth for each equation
-ff5f.fit <- tvGLS(x = x, y = y, bw = c(1.03, 0.44, 0.69, 0.31))
+FF5F.fit <- tvGLS(x = x, y = y, bw = c(1.03, 0.44, 0.69, 0.31))
 
 }

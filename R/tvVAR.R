@@ -100,6 +100,8 @@ tvVAR <- function (y, p = 1, z = NULL, ez = NULL, bw = NULL, cv.block = 0, type 
   if (!(is.null(exogen)))
   {
     exogen <- as.matrix(exogen)
+    if(is.null(dim(exogen)))
+      exogen <-matrix(exogen, nrow = length(exogen))
     if (!identical(NROW(exogen), NROW(y))) {
       stop("\nDifferent row size of 'y' and exogen.\n")
     }
