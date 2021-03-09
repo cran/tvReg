@@ -326,5 +326,6 @@ predict.tvplm<-function (object, newdata, newz, ...)
     prediction[t, ] <- crossprod(theta[t,], newdata[t,])
   prediction <- sweep(prediction, 2, object.up$alpha, "+")
   colnames(prediction) <- levels (object$index[, 1])
+  #Fitted and residuals must be calculated here for bootstrap
   return(prediction)
 }

@@ -16,7 +16,7 @@ tvSURE(
   method = c("tvOLS", "tvFGLS", "tvGLS"),
   Sigma = NULL,
   est = c("lc", "ll"),
-  tkernel = c("Epa", "Gaussian"),
+  tkernel = c("Triweight", "Epa", "Gaussian"),
   bw.cov = NULL,
   singular.ok = TRUE,
   R = NULL,
@@ -54,7 +54,7 @@ the covariance matrix of the error term. Only necessary for method \code{tvGLS}.
 
 \item{est}{The nonparametric estimation method, one of "lc" (default) for linear constant or "ll" for local linear.}
 
-\item{tkernel}{The type of kernel used in the coefficients estimation method, one of Epanesnikov ("Epa") or "Gaussian".}
+\item{tkernel}{A character, either "Triweight" (default), "Epa" or "Gaussian" kernel function.}
 
 \item{bw.cov}{An optional scalar. It represents the bandwidth in the "lc" nonparametric estimation of the
 time-varying covariance matrix. If NULL, it is selected by cross validation.}

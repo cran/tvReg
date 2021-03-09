@@ -23,6 +23,7 @@
 #' 
 #' @aliases tvplm-class tvplm
 #' @rdname tvPLM
+#' @importFrom plm pdata.frame pdim index
 #' @param formula An object of class formula.
 #' @param z A vector containing the smoothing variable.
 #' @param ez (optional) A scalar or vector with the smoothing estimation values. If 
@@ -40,11 +41,10 @@
 #' No individual or time effects are estimated
 #' If \code{method = "random"} then individual effects are considered random and independent
 #' of the regressors.
-#' If \code{method = "withint"} then individual effects which might be correlated with 
+#' If \code{method = "within"} then individual effects which might be correlated with 
 #' the regressors are estimated.
 #' @param est The nonparametric estimation method, one of "lc" (default) for linear constant
-#' @param tkernel The type of kernel used in the coefficients estimation method,
-#' one of Epanesnikov ("Epa") or "Gaussian".
+#' @param tkernel A character, either "Triweight" (default), "Epa" or "Gaussian" kernel function.
 #' @param control list of control parameters.  The default is constructed by
 #' the function \code{\link{tvreg.control}}.  See the documentation of
 #' \code{\link{tvreg.control}} for details.
@@ -96,12 +96,12 @@
 #' }
 #' @export
 tvPLM <- function (formula, z = NULL, ez = NULL, data, index = NULL, bw = NULL, bw.cov = NULL, cv.block = 0, 
-                   method = c("pooling", "random", "within"),  est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"), 
-                   control = tvreg.control(...), ...)
+                   method = c("pooling", "random", "within"),  est = c("lc", "ll"), 
+                   tkernel = c("Triweight", "Epa", "Gaussian"), control = tvreg.control(...), ...)
 {
-  is.panel <- inherits(data, c("data.frame", "matrix", "pdata.frame", "pdata.frame"))
+  is.panel <- inherits(data, c("data.frame", "matrix", "pdata.frame"))
   if(!is.panel)
-    stop("\nArgument 'data' should be entered and it should be a 'matrix', a 'data.frame', 'pdata.frame' or 'pdata.frame'.\n")
+    stop("\nArgument 'data' should be entered and it should be a 'matrix', a 'data.frame' or 'pdata.frame'.\n")
   if (!inherits(formula, c("formula"))) 
       stop("\nArgument 'formula' should be entered of class 'formula'.")
   if (!inherits(data, "pdata.frame")) 

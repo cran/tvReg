@@ -28,8 +28,7 @@
 #' By default 'cv.block=0' meaning leave one out cross-validation.
 #' @param est The nonparametric estimation method, one of "lc" (default) for linear constant
 #'  or "ll" for local linear.
-#' @param tkernel The type of kernel used in the coefficients estimation method,
-#' one of Epanesnikov ("Epa") or "Gaussian".
+#' @param tkernel A character, either "Triweight" (default), "Epa" or "Gaussian" kernel function.
 #' @param singular.ok	Logical. If FALSE, a singular model is an error.
 #'
 #' @return An object of class \code{tvlm}
@@ -93,7 +92,7 @@
 #' @export
 
 tvLM<-function (formula, z = NULL, ez = NULL, data, bw = NULL, cv.block = 0, est = c("lc", "ll"), 
-                tkernel = c("Epa", "Gaussian"), singular.ok = TRUE)
+                tkernel = c("Triweight", "Epa", "Gaussian"), singular.ok = TRUE)
 {
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
@@ -124,7 +123,7 @@ tvLM<-function (formula, z = NULL, ez = NULL, data, bw = NULL, cv.block = 0, est
   xnames <- colnames(x)
   yname <- attr(mt, "variables")[[2]]
   if(is.null(xnames))
-    xnames <- paste("X", 1:nvar, collate="&", sep="")
+    xnames <- paste0("X", 1:nvar, collate="&")
   coefficients <-results$coefficients
   colnames(coefficients) <- xnames
   result <- list(coefficients = coefficients, Lower = NULL, Upper = NULL, fitted = results$fitted,

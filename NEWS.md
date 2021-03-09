@@ -1,3 +1,15 @@
+
+
+
+#tvReg 0.5.4
+
+* Add par(ask=FALSE) at the end of plots.
+* Fix bug in `confint` for objects obtained with `tvFE`
+* Fix bug in `predict` for objects obtained with `tvFE`
+* Fix bug in `tvSURE` for datasets with different name than data
+* Add kernel function `Triweight` and make it the default
+* Remove package `plm` from dependencies and only import the necessary functions to avoid new compatibility issues between packages `Matrix` and `plm`.
+
 #tvReg 0.5.3
 
 * Add dates in data `CEES`

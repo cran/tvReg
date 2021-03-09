@@ -3,6 +3,7 @@
 #' Calculate bandwidth(s) by cross-validation for functions tvSURE, tvVAR and tvLM.
 #'
 #' @rdname bw
+#' @importFrom plm pdim 
 #' @param x An object used to select a method.
 #' @param ... Other parameters passed to specific methods.
 #' @return \code{bw} returns a vector or a scalar with the bandwith to estimate the mean or the covariance
@@ -18,8 +19,7 @@ bw <- function(x, ...)  UseMethod("bw", x)
 #' By default 'cv.block=0' meaning leave-one-out cross-validation.
 #' @param est The nonparametric estimation method, one of "lc" (default) for linear constant
 #' or "ll" for local linear.
-#' @param tkernel The type of kernel used in the coefficients estimation method,
-#' one of Epanesnikov ("Epa") or "Gaussian".
+#' @param tkernel A character, either "Triweight" (default), "Epa" or "Gaussian" kernel function.
 #' @param singular.ok	Logical. If FALSE, a singular model is an error.
 #'
 #' @return A scalar or a vector of scalars.
@@ -38,9 +38,9 @@ bw <- function(x, ...)  UseMethod("bw", x)
 #' @method bw default
 #' @export
 #'
-bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"),
+bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"),
                        singular.ok = TRUE, ...)
-{
+{ 
   if(!inherits(x, c("matrix", "data.frame", "vector", "numeric", "integer")))
     stop("'x' should be a matrix, a vector or a data frame. \n")
   if(is.null(y))
@@ -128,7 +128,7 @@ bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkerne
 #' @rdname bw
 #' @method bw list
 #' @export
-bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"),
+bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"),
                     singular.ok = TRUE, ...)
 {
   if(!inherits(x, "list"))
@@ -318,7 +318,7 @@ bw.tvplm <- function(x, ...)
 #' @rdname bw
 #' @export
 bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0, 
-                  est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"), ...)
+                  est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"), ...)
 {  
   dimen <- plm::pdim(x)
   neq <- dimen$nT$n
@@ -361,7 +361,7 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
       break()
     }
 
-    if (method != "tvFE")
+    if (method != "within")
       result <- try(stats::optim(stats::runif(1, lower, top), .tvRE.cv, method = "Brent",
                                  lower = lower, upper = upper, x = x, y = y, z = z, 
                                  neq = neq, obs = obs, cv.block = cv.block, est = est, 
@@ -409,7 +409,7 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
 #'
 #' @rdname bwCov
 #' @export
-bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Epa", "Gaussian"))
+bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"))
 {
   if(!inherits(x, c("matrix", "data.frame")))
     stop("'x' should be a matrix or a data.frame.\n")
@@ -433,7 +433,7 @@ bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Epa", "Gaus
     }
     result <- try(stats::optim(stats::runif(1, 5/obs, 1), .tvCov.cv, method = "Brent",
                                lower = 5/obs, upper = 20, x = x, cv.block = cv.block,
-                               est = est, tkernel = tkernel),
+                               est = est, tkernel = tkernel, maxit = 20),
                   silent = TRUE)
     if (!inherits(result, "list"))
       value <- .Machine$double.xmax

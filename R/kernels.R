@@ -5,10 +5,10 @@
 #' @details .kernel calculates the kernel values of a vector and a given bandwidth
 #' @param x A numeric vector.
 #' @param bw A scalar.
-#' @param tkernel A character, either "Epa" (default) or "Gaussian".
+#' @param tkernel A character, either "Triweight" (default), "Epa" or "Gaussian" kernel function.
 #' @return A numeric vector.
 #' @keywords internal
-.kernel <- function(x, bw, tkernel = "Epa")
+.kernel <- function(x, bw, tkernel = "Triweight")
 {
   x <- x/c(bw)
   value <- numeric(length(x))
@@ -20,6 +20,11 @@
   {
     index <- (x>=-1 & x<=1)
     value[index] <- 0.75 * (1 - x[index]^2)
+  }
+  else if (tkernel == "Triweight")
+  {
+    index <- (x>=-1 & x<=1)
+    value[index] <- 1.09375 * (1 - x[index]^2)^3
   }
   return(value)
 }

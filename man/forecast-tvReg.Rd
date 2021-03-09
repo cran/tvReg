@@ -64,23 +64,21 @@ newexogen <- newdata[, -1]
 forecast(TVHAR2, n.ahead = 3, newexogen = newexogen)
 
 data(usmacro, package = "bvarsv")
-tvVAR <- tvVAR(usmacro, p = 6, type = "const", bw = c(1.8, 20, 20))
-forecast(tvVAR, n.ahead = 10)
+model.tvVAR <- tvVAR(usmacro, p = 6, type = "const", bw = c(1.8, 20, 20))
+forecast(model.tvVAR, n.ahead = 10)
 
 data("Kmenta", package = "systemfit")
 eqDemand <- consump ~ price + income
 eqSupply <- consump ~ price + farmPrice 
 system <- list(demand = eqDemand, supply = eqSupply)
 tvOLS.fit <- tvSURE(system, data = Kmenta, est = "ll", bw = c(1.5, 1.5))
-newdata <- data.frame(consump = c(95, 100, 102), price = c(90, 100, 103), 
-farmPrice = c(70, 95, 103), income = c(82, 94, 115))
+newdata <- data.frame(price = c(90, 100, 103), farmPrice = c(70, 95, 103), 
+income = c(82, 94, 115))
 forecast(tvOLS.fit, newdata = newdata, n.ahead = 3)
-
 data(OECD)
 tvpols <- tvPLM(lhe~lgdp+pop65+pop14+public, index = c("country", "year"), 
 data = OECD, method = "pooling", bw =  8.9)
-newdata <- cbind(lgdp = c(10, 13), pop65 = c(9, 12), 
-pop14 = c(17, 30), public = c(13, 20))  
+newdata <- OECD[c(7, 9), 4:7]
 forecast(tvpols, newdata = newdata, n.ahead = 2)
 }
 \seealso{
