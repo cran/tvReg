@@ -81,15 +81,24 @@ summary.tvsure <- function (object,  digits = max(3, getOption("digits") - 3), .
     row <- paste(rep("=", nchar(text1)), collapse = "")
     cat(row, "\n")
     index <- (sum(nvar[-c(i:neq)]) + 1):(sum(nvar[-c(i:neq)]) + nvar[i])
-    print(apply(result[, index], 2, summary), digits = digits)
+    if(dim(result)[1]>1)
+      print(apply(result[, index], 2, summary), digits = digits)
+    else
+      print(summary(result[, index]), digits = digits)
     if(!is.null(lower))
     {
       text1 <- paste("\nLOWER (", level, "%) confidence interval:", sep ="")
       cat(text1, "\n")
-      print(apply(lower[, index], 2, summary), digits = digits)
+      if(dim(result)[1]>1)
+        print(apply(lower[, index], 2, summary), digits = digits)
+      else
+        print(summary(lower[, index]), digits = digits)
       text1 <- paste("\nUPPER (", level, "%) confidence interval:", sep ="")
       cat(text1, "\n")
-      print(apply(upper[, index], 2, summary), digits = digits)
+      if(dim(result)[1]>1)
+        print(apply(upper[, index], 2, summary), digits = digits)
+      else
+        print(summary(upper[, index]), digits = digits)
     }
     cat("\nBandwidth: ", bw[i])
     SSR <- sum(object$residuals[, i]^2)

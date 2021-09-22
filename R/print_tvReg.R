@@ -68,8 +68,11 @@ print.tvsure <- function (x,  digits = max(3, getOption("digits") - 3), ...)
       cat(text1, "\n")
       row <- paste(rep("=", nchar(text1)), collapse = "")
       cat(row, "\n")
-      print(apply(result[, (sum(nvar[-c(i:neq)]) + 1):(sum(nvar[-c(i:neq)]) + nvar[i])], 
-                  2, mean), digits = digits)
+      if(dim(result)[1]>1)
+        print(apply(result[, (sum(nvar[-c(i:neq)]) + 1):(sum(nvar[-c(i:neq)]) + nvar[i])], 
+                    2, mean), digits = digits)
+      else
+        print(result[, (sum(nvar[-c(i:neq)]) + 1):(sum(nvar[-c(i:neq)]) + nvar[i])], digits = digits)
       cat("\nBandwidth: ", bw[i])
       if (method == "TVFGLS")
         cat("\t\t Covariance bandwidth: ", x$bw.cov)

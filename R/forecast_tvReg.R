@@ -1,4 +1,3 @@
-
 #' Forecast Methods for Objects in tvReg.
 #'
 #' \code{forecast} calculates the forecast for objects with class attribute \code{tvlm}, \code{tvar}, 
@@ -11,7 +10,6 @@
 #' variable of \code{object}.
 #' @seealso \code{\link{predict}}. 
 #' @rdname forecast-tvReg
-#' @import methods
 #' @export
 forecast <- function(object, ...) UseMethod("forecast", object)
 
@@ -87,9 +85,11 @@ forecast.tvlm<-function (object, newdata, n.ahead = 1, winsize = 0, ...)
 #' @param newexogen A matrix or vector with the new values of the exogenous variables.
 #' Only for predictions of *tvar* and *tvvar* objects.
 #' @examples 
-#' exogen = RV2[, c("RV_week", "RV_month")]
-#' TVHAR2 <- tvAR(RV2$RV_lag, p = 1, exogen = exogen, bw = 20)
-#' newexogen <- newdata[, -1]
+#' 
+#' data("RV")
+#' exogen = RV[1:2001, c("RV_week", "RV_month")]
+#' TVHAR2 <- tvAR(RV$RV_lag[1:2001], p = 1, exogen = exogen, bw = 20)
+#' newexogen <- RV[2002:2004, c("RV_week", "RV_month")]
 #' forecast(TVHAR2, n.ahead = 3, newexogen = newexogen)
 #' 
 #' @export
@@ -106,7 +106,7 @@ forecast.tvar <- function(object, n.ahead = 1, newz = NULL, newexogen = NULL, wi
       stop("\nWrong dimension in 'newexogen'.\n")
     newexogen <- as.matrix(newexogen)
     if(NROW(newexogen) != n.ahead)
-      stop("\nDimensions of 'newxexogen' and 'n.ahead' are not compatible.\n")
+      stop("\nDimensions of 'newexogen' and 'n.ahead' are not compatible.\n")
     newexogen <- as.matrix(newexogen)
   }
   is.intercept <- (object$type == "const")
@@ -180,7 +180,7 @@ forecast.tvvar<-function (object, n.ahead = 1, newz = NULL, newexogen = NULL, wi
     if(is.null(dim(newexogen)))
       newexogen <- matrix (newexogen, nrow = length(newexogen), ncol = 1)
     if(NROW(newexogen) != n.ahead)
-      stop("\nDimensions of 'newxexogen' and 'n.ahead' are not compatible.\n")
+      stop("\nDimensions of 'newexogen' and 'n.ahead' are not compatible.\n")
   }
   neq <- object$neq
   obs <- object$obs

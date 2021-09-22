@@ -56,7 +56,7 @@ predict.tvlm<-function (object, newdata, newz, ...)
   obs <- NROW(object$x) 
   is.intercept <- ("(Intercept)" %in% colnames(object$x))
   if(is.intercept & n.col == (NCOL(object$x) - 1))
-    newdata <- cbind(rep(1, n.ahead), newdata)
+    newdata <- cbind(1L, newdata)
   prediction <- numeric(n.ahead)
   object$ez <- newz
   theta <- tvOLS(object)$coefficients
@@ -70,7 +70,8 @@ predict.tvlm<-function (object, newdata, newz, ...)
 #' @examples 
 #' ## Example of TVAR prediction with coefficients as 
 #' ## functions of the realized quarticity
-#' 
+#' data("RV")
+#' RV2 <- head(RV, 2001)
 #' exogen = RV2[, c("RV_week", "RV_month")]
 #' TVHARQ2 <- tvAR (RV2$RV, p = 1, exogen = exogen,  
 #'                       z = RV2[, "RQ_lag_sqrt"], bw = 0.0062)
@@ -107,9 +108,9 @@ predict.tvar<-function (object, newdata, newz, newexogen = NULL, ...)
   if(!is.null(newexogen))
   {
     if(NCOL(newexogen) == 1)
-      newexogen <- matrix (newexogen, ncol = length(newexogen))
+      newexogen <- matrix (newexogen, ncol = NCOL(newexogen))
     if(NROW(newexogen) != n.ahead)
-      stop("\nDimensions of 'newxexogen' and 'n.ahead' are not compatible.\n")
+      stop("\nDimensions of 'newexogen' and 'n.ahead' are not compatible.\n")
     newexogen <- as.matrix(newexogen)
     newx <- cbind(newx, newexogen)
   }
@@ -119,7 +120,7 @@ predict.tvar<-function (object, newdata, newz, newexogen = NULL, ...)
   obs <- NROW(object$x) 
   is.intercept <- ("(Intercept)" %in% colnames(object$x))
   if(is.intercept & n.col == (NCOL(object$x) - 1))
-    newx <- cbind(rep(1, n.ahead), newx)
+    newx <- cbind(1L, newx)
   prediction <- numeric(n.ahead)
   object$ez <- newz
   theta <- tvOLS(object)$coefficients
@@ -181,9 +182,9 @@ predict.tvvar<-function (object, newdata, newz, newexogen = NULL, ...)
   {
     is.exogen <- TRUE
     if(NCOL(newexogen) == 1)
-      newexogen <- matrix (newexogen, ncol = length(newexogen))
+      newexogen <- matrix (newexogen, ncol = NCOL(newexogen))
     if(NROW(newexogen) != n.ahead)
-      stop("\nDimensions of 'newxexogen' and 'n.ahead' are not compatible.\n")
+      stop("\nDimensions of 'newexogen' and 'n.ahead' are not compatible.\n")
     n.exogen <- NCOL(newexogen)
     newexogen <- as.matrix(newexogen)
   }

@@ -6,7 +6,6 @@
 #' @references Aslanidis, N. and Casas, I (2013) Nonparametric correlation models for portfolio
 #' allocation. \emph{Journal of Banking \& Finance}, 37, 2268-2283
 #'
-#' @importFrom MASS mvrnorm
 #' @param x A matrix.
 #' @param bw A scalar.
 #' @param cv.block A positive scalar with the size of the block in leave-one block-out cross-validation.

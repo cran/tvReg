@@ -13,7 +13,6 @@
 #' \item{residuals}{A vector of length obs with the residuals from the estimation.}
 #' \item{alpha}{A vector of length neq with the fixed effects.}
 #' @export
-#' @import methods
 tvFE <- function(x, ...) UseMethod("tvFE", x)
 
 #' @rdname tvFE

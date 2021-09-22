@@ -12,7 +12,6 @@
 #' \item{residuals}{A vector of length obs with the residuals from the estimation.}
 #' \item{alpha}{A vector of length neq with the fixed effects.}
 #' @export
-#' @import methods
 tvRE <- function(x, ...) UseMethod("tvRE", x)
 
 #' @rdname tvRE

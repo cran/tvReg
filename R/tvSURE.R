@@ -49,7 +49,6 @@
 #'
 #' @aliases tvsure-class tvsure
 #' @rdname tvSURE
-#' @importFrom systemfit systemfit
 #' @param formula A list of formulas, one for each equation.
 #' @param z A vector containing the smoothing variable.
 #' @param ez (optional) A scalar or vector with the smoothing estimation values. If 

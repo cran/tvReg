@@ -58,6 +58,9 @@ tvVAR <- function (y, p = 1, z = NULL, ez = NULL, bw = NULL, cv.block = 0, type 
   y <- as.matrix(y)
   if (any(is.na(y)))
     stop("\nNAs in y.\n")
+  toobs <- dim(y)[1]
+  neq <- dim(y)[2]
+  obs <- toobs - p
   if(!is.null(z))
   {
    if(!inherits(z, c("numeric", "vector")))
@@ -80,32 +83,29 @@ tvVAR <- function (y, p = 1, z = NULL, ez = NULL, bw = NULL, cv.block = 0, type 
   colnames(y) <- var.names
   y.orig <- y
   type <- match.arg(type)
-  obs <- dim(y)[1]
-  neq <- dim(y)[2]
-  sample <- obs - p
+  
   rhs <- stats::embed(y, dimension = p + 1)[, -(1:neq)]
   colnames(rhs) <- paste0(colnames(y), paste0(".l", rep(1:p, each=length(var.names))))
   yend <- y[-c(1:p), ]
   if (type == "const")
   {
     tmp <- colnames(rhs)
-    rhs <- cbind(rhs, rep(1, sample))
+    rhs <- cbind(rhs, 1L)
     colnames(rhs) <- c(tmp, "(Intercept)")
   }
-  if (!(is.null(exogen)))
+  if (!(is.null(exogen))) 
   {
-    exogen <- as.matrix(exogen)
-    if(is.null(dim(exogen)))
-      exogen <-matrix(exogen, nrow = length(exogen))
-    if (!identical(NROW(exogen), NROW(y)))
+    if(NCOL(exogen)==1)
+      exogen <- matrix(exogen)
+    exogen <- as.matrix(exogen[-c(1:p),])
+    names.exo <- colnames(exogen)
+    if (!identical(NROW(exogen), NROW(yend)))
       stop("\nDifferent row size of 'y' and exogen.\n")
-    if (is.null(colnames(exogen)))
-      colnames(exogen) <- paste("exo", 1:NCOL(exogen))
-    colnames(exogen) <- make.names(colnames(exogen))
-    tmp <- colnames(rhs)
-    exogen <- exogen[-c(1:p),]
+    if (is.null(names.exo)) 
+      names.exo <- c(paste0("exo", 1:NCOL(exogen)))
+    names.exo <- c(colnames(rhs), names.exo)
     rhs <- cbind(rhs, exogen)
-    colnames(rhs) <- c(tmp, colnames(exogen))
+    colnames(rhs) <- names.exo
   }
   equation <- list()
   if(is.null(bw))
@@ -115,11 +115,11 @@ tvVAR <- function (y, p = 1, z = NULL, ez = NULL, bw = NULL, cv.block = 0, type 
              est = est, singular = singular.ok)
     cat("bandwidth(s) ", bw, "\n")
   }
-  resid = fitted <- matrix(0, nrow = sample, ncol = neq)
+  resid = fitted <- matrix(0, nrow = obs, ncol = neq)
   for (i in 1:neq)
   {
       y <- yend[, i]
-      results <- tvOLS(x = rhs, y = y, z = z, bw = bw[i], est = est, tkernel = tkernel,
+      results <- tvOLS(x = rhs, y = y, z = z, ez = ez, bw = bw[i], est = est, tkernel = tkernel,
                        singular.ok = singular.ok)
       equation[[colnames(yend)[i]]] <- results$coefficients
       colnames(equation[[colnames(yend)[i]]]) <- colnames(rhs)
@@ -134,9 +134,9 @@ tvVAR <- function (y, p = 1, z = NULL, ez = NULL, bw = NULL, cv.block = 0, type 
   else
     names(bw) <- paste0("bw.", names(equation))
   result <- list(coefficients = equation, Lower = NULL, Upper = NULL,  fitted = fitted,
-                 residuals = resid, y = yend, x = rhs, z = z, y.orig = y.orig,
-                 bw = bw, cv.block = cv.block, exogen = exogen, p = p, type = type, obs = sample, 
-                 totobs = sample + p, neq = neq, est = est, tkernel = tkernel, 
+                 residuals = resid, y = yend, x = rhs, z = z, ez = ez, y.orig = y.orig,
+                 bw = bw, cv.block = cv.block, exogen = exogen, p = p, type = type, obs = obs, 
+                 totobs = toobs, neq = neq, est = est, tkernel = tkernel, 
                  singular.ok = singular.ok, call = match.call())
   class(result) <- "tvvar"
   return(result)

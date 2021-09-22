@@ -4,7 +4,6 @@
 #' of class \code{tvvar},  obtained with function \code{tvVAR} for \code{n.ahead} steps.
 #'
 #' @aliases tvirf-class tvirf.
-#' @importFrom vars VAR irf
 #' @param x An object of class \code{tvvar}.
 #' @param impulse	A character vector of the impulses, default is all variables.
 #' @param response A character vector of the responses, default is all variables.
@@ -102,7 +101,7 @@ tvIRF<-function (x, impulse = NULL, response = NULL, n.ahead = 10,
   irs <- .tvIRF(x = x, impulse = impulse, response = response,
               y.names = y.names, n.ahead = n.ahead, ortho = ortho,
               cumulative = cumulative, ortho.cov = ortho.cov, bw.cov = bw.cov)
-  result <- list( irf = irs$irf, Lower = NULL, Upper = NULL, response = response,
+  result <- list(irf = irs$irf, Lower = NULL, Upper = NULL, response = response,
                  impulse = impulse, x = x,  n.ahead = n.ahead, ortho = ortho,
                  ortho.cov = ortho.cov, bw.cov = irs$bw.cov, 
                  cumulative = cumulative, level = 0, runs = 0, 

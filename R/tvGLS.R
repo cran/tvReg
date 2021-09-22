@@ -66,7 +66,6 @@ tvGLS.list <- function(x, y, z = NULL, ez = NULL, bw, Sigma = NULL, R = NULL, r 
 {
   if(!inherits(x, "list"))
     stop("\n'x' should be a list of matrices. \n")
-  is.predict <- ifelse (is.null(ez), FALSE, TRUE)
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
   y <- as.matrix(y)
@@ -112,7 +111,7 @@ tvGLS.list <- function(x, y, z = NULL, ez = NULL, bw, Sigma = NULL, R = NULL, r 
       stop("\nWrong dimension of 'r', it should be as long as the number of 
            rows in 'R'. \n")
   }
-  fitted=resid<- matrix(0, obs, neq)
+  fitted=resid<- matrix(0, eobs, neq)
   theta <- matrix(0, eobs, sum(nvar))
   for (t in 1:eobs)
   {
@@ -157,13 +156,10 @@ tvGLS.list <- function(x, y, z = NULL, ez = NULL, bw, Sigma = NULL, R = NULL, r 
       theta[t, ] <- drop(theta[t, ] - Sinv %*% t(R) %*%
         qr.solve(R %*% Sinv %*% t(R)) %*% (R %*% theta[t, ] - r))
     }
-    xt.diag <- as.matrix(Matrix::bdiag(lapply(x,"[",t, ,drop = FALSE)))
+    xt.diag <- as.matrix(Matrix::bdiag(lapply(x,"[",obs-eobs+t, ,drop = FALSE)))
     fitted[t, ] <- xt.diag %*% theta[t, ]
   }
-  if(!is.predict)
-    resid <- as.matrix(y - fitted)
-  else
-    fitted = resid <- NULL
+  resid <- tail(y, eobs) - fitted
   return(list( coefficients = theta, fitted = fitted, residuals = resid))
 }
 
@@ -175,7 +171,6 @@ tvGLS.matrix <- function(x, y, z = NULL, ez = NULL, bw, Sigma = NULL, R = NULL, 
 {
   if(!inherits (x, "matrix"))
     stop("\n'x' should be a 'matrix'. \n")
-  is.predict <- ifelse (is.null(ez), FALSE, TRUE)
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
   y <- as.matrix(y)
@@ -266,13 +261,10 @@ tvGLS.matrix <- function(x, y, z = NULL, ez = NULL, bw, Sigma = NULL, R = NULL, 
       theta[t, ] <- drop(theta[t, ] - Sinv %*% t(R) %*%
                            qr.solve(R %*% Sinv %*% t(R)) %*% (R %*% theta[t, ] - r))
     }
-    xt.diag <- as.matrix(Matrix::bdiag(lapply(x,"[",t, ,drop = FALSE)))
+    xt.diag <- as.matrix(Matrix::bdiag(lapply(x,"[",obs-eobs+t, ,drop = FALSE)))
     fitted[t, ] <- xt.diag %*% theta[t, ]
   }
-  if(!is.predict)
-    resid <- as.matrix(y - fitted)
-  else
-    resid = fitted <- NULL
+  resid <- tail(y, eobs) - fitted
   return(list( coefficients = theta, fitted = fitted, residuals = resid))
 }
 

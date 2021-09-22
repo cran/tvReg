@@ -23,7 +23,6 @@
 #' 
 #' @aliases tvplm-class tvplm
 #' @rdname tvPLM
-#' @importFrom plm pdata.frame pdim index
 #' @param formula An object of class formula.
 #' @param z A vector containing the smoothing variable.
 #' @param ez (optional) A scalar or vector with the smoothing estimation values. If 

@@ -153,7 +153,7 @@
     VAR$residuals <- resid
     temp <- stats::embed(ystar, dimension = p + 1)[, -c(1:neq)]
     if(type == "const")
-      temp <- cbind(temp, rep(1, obs))
+      temp <- cbind(temp, 1L)
     VAR$x[, 1:NCOL(temp)] <- temp
     varboot <- update(VAR)
     BOOT[[i]] <- .tvIRF(x = varboot, impulse = impulse, response = response, y.names = y.names,

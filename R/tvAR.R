@@ -109,22 +109,22 @@ tvAR <- function (y, p = 1, z = NULL, ez = NULL, bw = NULL, cv.block = 0, type =
   rhs <- ylags
   colnames(rhs) <- make.names(colnames(ylags))
   if (type == "const") {
-    rhs <- cbind(rep(1, sample), ylags)
+    rhs <- cbind(1L, ylags)
     colnames(rhs) <- c("(Intercept)", colnames(ylags))
   }
   if (!(is.null(exogen))) 
   {
-    exogen <- as.matrix(exogen)
-    if (!identical(NROW(exogen), NROW(y)))
+    if(NCOL(exogen)==1)
+      exogen <- matrix(exogen)
+    exogen <- as.matrix(exogen[-c(1:p),])
+    names.exo <- colnames(exogen)
+    if (!identical(NROW(exogen), NROW(yend)))
       stop("\nDifferent row size of 'y' and exogen.\n")
-    if (is.null(colnames(exogen))) 
-      colnames(exogen) <- paste("exo", 1:ncol(exogen),
-                                sep = "")
-    colnames(exogen) <- make.names(colnames(exogen))
-    tmp <- colnames(rhs)
-    exogen <- exogen[-c(1:p),]
+    if (is.null(names.exo)) 
+      names.exo <- c(paste0("exo", 1:NCOL(exogen)))
+    names.exo <- c(colnames(rhs), names.exo)
     rhs <- cbind(rhs, exogen)
-    colnames(rhs) <- c(tmp, colnames(exogen))
+    colnames(rhs) <- names.exo
   }
   if (!is.null(z))
   {

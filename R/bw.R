@@ -3,7 +3,6 @@
 #' Calculate bandwidth(s) by cross-validation for functions tvSURE, tvVAR and tvLM.
 #'
 #' @rdname bw
-#' @importFrom plm pdim 
 #' @param x An object used to select a method.
 #' @param ... Other parameters passed to specific methods.
 #' @return \code{bw} returns a vector or a scalar with the bandwith to estimate the mean or the covariance
@@ -64,10 +63,9 @@ bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkerne
   }
   else
   {
-    top <- max(z) - min(z)
-    upper <- top * 5
-    dist <- diff(sort(z))
-    lower <- min(dist)
+    top <- (max(z) - min (z))* 5
+    upper <- top 
+    lower <- top * 0.001
   }
   bw <- numeric(neq)
   for (j in 1:neq)
@@ -155,10 +153,9 @@ bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel =
   }
   else
   {
-    top <- max(z)- min(z)
-    upper <- top * 5
-    dist <- diff(sort(z))
-    lower <- min(dist)
+    top <- (max(z) - min(z))*5
+    upper <- top
+    lower <- top * 0.001
   }
   for (j in 1:neq)
   {
@@ -255,10 +252,9 @@ bw.tvplm <- function(x, ...)
   }
   else
   {
-    top <- max(z)- min(z)
-    upper <- top * 5
-    dist <- diff(sort(z))
-    lower <- min(dist)
+    top <- (max(z) - min(z))*5
+    upper <- top
+    lower <- top * 0.001
   }
   iter <- 0
   value <- .Machine$double.xmax
@@ -313,7 +309,6 @@ bw.tvplm <- function(x, ...)
 #' If method = \code{tvRE} then individual effects are considered random and independent
 #' of the regressors.
 #' @return A scalar.
-#' @import plm
 #' @method bw pdata.frame
 #' @rdname bw
 #' @export
@@ -343,10 +338,9 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
   }
   else
   {
-    top <- max(z)- min(z)
-    upper <- top * 5
-    dist <- diff(sort(z))
-    lower <- min(dist)
+    top <- (max(z) - min(z))*5
+    upper <- top
+    lower <- top * 0.001
   }
   value <- .Machine$double.xmax
   iter <- 0
@@ -433,7 +427,7 @@ bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight",
     }
     result <- try(stats::optim(stats::runif(1, 5/obs, 1), .tvCov.cv, method = "Brent",
                                lower = 5/obs, upper = 20, x = x, cv.block = cv.block,
-                               est = est, tkernel = tkernel, maxit = 20),
+                               est = est, tkernel = tkernel),
                   silent = TRUE)
     if (!inherits(result, "list"))
       value <- .Machine$double.xmax
@@ -446,4 +440,3 @@ bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight",
   }
   return(bw)
 }
-

@@ -49,7 +49,6 @@ tvOLS.matrix <- function(x, y, z = NULL, ez = NULL, bw, est = c("lc", "ll"),
     stop("\nDimensions of 'x' and 'y' are not compatible.\n")
   if(!is.numeric(bw))
     stop ("Argument 'bw' should be a scalar. \n")
-  is.predict <- ifelse (is.null(ez), FALSE, TRUE)
   if(!is.null(z))
   {
     if(length(z) != obs)
@@ -79,12 +78,9 @@ tvOLS.matrix <- function(x, y, z = NULL, ez = NULL, bw, est = c("lc", "ll"),
     result <- stats::lm.wfit(x = as.matrix(xtemp), y = y[k.index], 
                              w = kernel.bw[k.index], singular.ok = singular.ok)
     theta[t,] <- result$coefficients[1:nvar]
-    fitted[t] <- crossprod(x[t, !is.na(theta[t,])], theta[t, !is.na(theta[t,])])
+    fitted[t] <- crossprod(x[obs-eobs+t, !is.na(theta[t,])], theta[t, !is.na(theta[t,])])
   }
-  if(!is.predict)
-    resid <- y - fitted
-  else
-    fitted = resid <- NULL
+  resid <- tail(y, eobs) - fitted
   return(list(coefficients = theta, fitted = fitted, residuals = resid))
 }
 
@@ -112,21 +108,15 @@ tvOLS.tvvar <- function(x, ...)
   neq <- x$neq
   rhs <- x$x
   eqnames <- colnames(x$y)
-  is.predict <- ifelse (is.null(x$ez), FALSE, TRUE)
-  resid = fitted <- NULL
-  if(!is.predict)
-    resid = fitted <- matrix(0, nrow = x$obs, ncol = neq)
+  resid = fitted <- matrix(0, nrow = ifelse(is.null(x$ez), NROW(rhs), length(x$ez)), ncol = neq)
   for (i in 1:neq)
   {
-    results <- tvOLS(x = rhs, y = x$y[, i], z = x$z, ez = x$ez, bw = x$bw[i], est = x$est, tkernel = x$tkernel, 
-                     singular.ok = x$singular.ok)
+    results <- tvOLS(x = rhs, y = x$y[, i], z = x$z, ez = x$ez, bw = x$bw[i], est = x$est, 
+                     tkernel = x$tkernel, singular.ok = x$singular.ok)
     equation[[eqnames[i]]] <- results$coefficients
     colnames(equation[[eqnames[i]]]) <- colnames(rhs)
-    if(!is.predict)
-    {
-      resid[, i] <- results$residuals
-      fitted[, i] <- results$fitted
-    }
+    resid[, i] <- results$residuals
+    fitted[, i] <- results$fitted
   }
   return(list(coefficients = equation, fitted = fitted, residuals = resid))
 }
@@ -134,7 +124,7 @@ tvOLS.tvvar <- function(x, ...)
 
 #' @rdname tvReg-internals
 #' @keywords internal
-.tvOLS.cv <- function(bw, x, y, z = NULL,  cv.block = 0, est = c("lc", "ll"), 
+.tvOLS.cv <- function(bw, x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), 
                       tkernel = c("Triweight", "Epa", "Gaussian"), singular.ok = TRUE)
 {
   x <- as.matrix(x)
