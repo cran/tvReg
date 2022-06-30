@@ -29,16 +29,16 @@
 #' has zero mean and  covariance matrix \eqn{E(u_t u_t') = \Sigma_t}.
 #'
 #' @references
-#' Casas, I., Ferreira, E., and Orbe, S. (2017) Time-Varying Coefficient Estimation 
-#' in SURE Models: Application to Portfolio Management. Available at SSRN: 
-#' https://ssrn.com/abstract=3043137
+#' Casas, I., Ferreira, E., and Orbe, S. (2021) Time-Varying Coefficient Estimation 
+#' in SURE Models: Application to Portfolio Management. 
+#' \emph{Journal of Financial Econometrics}, 19, 707-745.
 #' 
 #' Chen, X. B., Gao, J., Li, D., and Silvapulle, P (2017) Nonparametric Estimation and 
 #' Forecasting for Time-Varying Coefficient Realized Volatility Models.
-#' \emph{Journal of Business \& Economic Statistics}, pp.1-13
+#' \emph{Journal of Business and Economic Statistics}, 36, 88-100.
 #'
 #' Granger, C. W (2008) Non-Linear Models: Where Do We Go Next - Time Varying
-#' Parameter Models? \emph{Studies in Nonlinear Dynamics \& Econometrics}, 12, pp. 1-11.
+#' Parameter Models? \emph{Studies in Nonlinear Dynamics and Econometrics}, 12, pp. 1-11.
 #'
 #' Kristensen, D (2012) Non-parametric detection and estimation of structural change.
 #' \emph{Econometrics Journal}, 15, pp. 420-461.

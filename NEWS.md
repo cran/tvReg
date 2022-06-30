@@ -1,3 +1,7 @@
+# tvReg 0.5.7
+
+* Bug fix in `forecast` for `tvvar` objects with 1 lag. We thank Michael Wolf for reporting it to us.
+
 # tvReg 0.5.6
 
 * Added package documentation (in "tvReg-package.R", which now also includes data documentation). 

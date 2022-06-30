@@ -4,7 +4,7 @@
 #' smoothing methodologies.
 #' 
 #' @references Aslanidis, N. and Casas, I (2013) Nonparametric correlation models for portfolio
-#' allocation. \emph{Journal of Banking \& Finance}, 37, 2268-2283
+#' allocation. \emph{Journal of Banking and Finance}, 37, 2268-2283
 #'
 #' @param x A matrix.
 #' @param bw A scalar.
