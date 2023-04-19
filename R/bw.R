@@ -126,7 +126,8 @@ bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkerne
 #' @rdname bw
 #' @method bw list
 #' @export
-bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"),
+bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), 
+                    tkernel = c("Triweight", "Epa", "Gaussian"),
                     singular.ok = TRUE, ...)
 {
   if(!inherits(x, "list"))
@@ -134,7 +135,7 @@ bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel =
   neq <- length(x)
   if(neq < 2)
     stop("'x' should have at least two elements.\n")
-  if (sum(is.na(y)) >0)
+  if(sum(is.na(y)) > 0)
     stop("There are NA values in your data, please enter only complete cases. \n")
   if(is.null(y))
     stop("Parameter 'y' is missing.\n")
@@ -403,7 +404,8 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
 #'
 #' @rdname bwCov
 #' @export
-bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"))
+bwCov <- function(x, z = NULL, cv.block = 0, est = c("lc", "ll"), 
+                  tkernel = c("Triweight", "Epa", "Gaussian"))
 {
   if(!inherits(x, c("matrix", "data.frame")))
     stop("'x' should be a matrix or a data.frame.\n")
@@ -413,20 +415,32 @@ bwCov <- function(x, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight",
   cv.block <- abs(cv.block)
   obs <- NROW(x)
   neq <- NCOL(x)
-  value  <- .Machine$double.xmax
   iter <- 0
+  if(is.null(z))
+  {
+    upper <- 20
+    lower <- 5/obs
+    top <- 1
+  }
+  else
+  {
+    top <- (max(z) - min(z))*5
+    upper <- top
+    lower <- top * 0.001
+  }
+  value  <- .Machine$double.xmax
   while(value == .Machine$double.xmax)
   {
     if(iter == 10)
     {
       value <- 0
-      bw <- 20
+      bw <- top
       warning("Maximum number of iterations reached in bandwidth calculation: either the function
             is constant, or no convergence of bandwidth. \n")
       break()
     }
     result <- try(stats::optim(stats::runif(1, 5/obs, 1), .tvCov.cv, method = "Brent",
-                               lower = 5/obs, upper = 20, x = x, cv.block = cv.block,
+                               lower = 5/obs, upper = 20, x = x, z = z, cv.block = cv.block,
                                est = est, tkernel = tkernel),
                   silent = TRUE)
     if (!inherits(result, "list"))

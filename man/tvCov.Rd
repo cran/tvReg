@@ -6,6 +6,8 @@
 \usage{
 tvCov(
   x,
+  z = NULL,
+  ez = NULL,
   bw = NULL,
   cv.block = 0,
   est = c("lc", "ll"),
@@ -14,6 +16,11 @@ tvCov(
 }
 \arguments{
 \item{x}{A matrix.}
+
+\item{z}{A vector with the variable over which coefficients are smooth over.}
+
+\item{ez}{(optional) A scalar or vector with the smoothing values. If 
+values are not included then the vector \code{z} is used instead.}
 
 \item{bw}{A scalar.}
 

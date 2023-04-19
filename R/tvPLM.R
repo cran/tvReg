@@ -25,8 +25,8 @@
 #' @rdname tvPLM
 #' @param formula An object of class formula.
 #' @param z A vector containing the smoothing variable.
-#' @param ez (optional) A scalar or vector with the smoothing estimation values. If 
-#' values are included then the vector \code{z} is used.
+#' @param ez (optional) A scalar or vector with the smoothing values. If 
+#' values are not included then the vector \code{z} is used instead.
 #' @param data An optional data frame or matrix.
 #' @param index	Indicates the individual and time indexes. 
 #' @param bw An opcional scalar. It represents the bandwidth in
