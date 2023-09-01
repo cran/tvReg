@@ -1,3 +1,9 @@
+# tvReg 0.5.9
+
+* Bug fix in `bwCov` when `bw` is `NULL`.
+
+* Added function `tvCor` to calculate the correlation matrix correspondent to `tvCov`
+
 # tvReg 0.5.8
 
 * Bug fix in `plot`for `tvsure` objects.

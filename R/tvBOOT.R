@@ -15,7 +15,7 @@
   }
   obs <- length(x$y)
   nvar <- NCOL (x$x)
-  resorig <- scale(x$residuals, scale = FALSE)
+  resorig <- c(scale(x$residuals, scale = FALSE))
   fitted <- x$fitted
   prob <- c(0.7236067977499789360962267892318777740001678466796875,
             0.2763932022500210639037732107681222259998321533203125)

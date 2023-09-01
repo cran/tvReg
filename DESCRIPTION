@@ -2,8 +2,8 @@ Package: tvReg
 Type: Package
 Title: Time-Varying Coefficient for Single and Multi-Equation
         Regressions
-Version: 0.5.8
-Date: 2023-04-19
+Version: 0.5.9
+Date: 2023-09-01
 Authors@R: c(person("Isabel", "Casas", email = "casasis@gmail.com", role = c("aut", "cre")),
         person("Ruben", "Fernandez-Casal", email = "rubenfcasal@gmail.com", role = "aut"))
 Description: Fitting time-varying coefficient models for single and multi-equation regressions, using kernel smoothing techniques.
@@ -22,5 +22,5 @@ Author: Isabel Casas [aut, cre],
 Maintainer: Isabel Casas <casasis@gmail.com>
 Repository: CRAN
 NeedsCompilation: no
-Packaged: 2023-04-19 20:15:21 UTC; ysa
-Date/Publication: 2023-04-19 20:40:02 UTC
+Packaged: 2023-09-01 10:49:55 UTC; ysa
+Date/Publication: 2023-09-01 11:30:07 UTC

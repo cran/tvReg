@@ -1,6 +1,6 @@
 #' Time-varying Variance-Covariance Estimation
 #'
-#' Estimation of a time-varying variance-covariance matrix using the local constant or the local linear kernel
+#' Estimation of a time-varying/funcional coefficients variance-covariance matrix using the local constant or the local linear kernel
 #' smoothing methodologies.
 #' 
 #' @references Aslanidis, N. and Casas, I (2013) Nonparametric correlation models for portfolio
@@ -10,15 +10,15 @@
 #' @param z A vector with the variable over which coefficients are smooth over.
 #' @param ez (optional) A scalar or vector with the smoothing values. If 
 #' values are not included then the vector \code{z} is used instead.
-#' @param bw A scalar.
+#' @param bw (Optional) A scalar.
 #' @param cv.block A positive scalar with the size of the block in leave-one block-out cross-validation.
 #' By default 'cv.block=0' meaning leave-one-out cross-validation.
 #' @param est A character, either "lc" or "ll" for local constant or local linear.
 #' @param tkernel A character, either "Triweight, "Epa" or "Gaussian" kernel functions.
 #'
-#' @return A matrix of dimension obs x neq x neq.
+#' @return An array of dimension neq x neq x obs.
 #' 
-#' @seealso \code{\link{bwCov}}
+#' @seealso \code{\link{bwCov}}, \code{\link{tvCor}}
 #'
 #' @examples
 #' ##Generate two independent (uncorrelated series)
@@ -56,7 +56,7 @@ tvCov <- function(x, z = NULL, ez = NULL, bw = NULL, cv.block = 0, est = c("lc",
   Sigma <- array(0, dim = c(neq, neq, obs))
   resid.2 <- numeric(obs)
   if(is.null(bw))
-    bw <- bwCov(x, cv.block = abs(cv.block), est, tkernel)
+    bw <- bwCov(x, z = z, cv.block = abs(cv.block), est, tkernel)
   if(length(bw) > 1)
     bw <- stats::median(bw)
   if(!is.null(z))
@@ -161,53 +161,58 @@ tvCov <- function(x, z = NULL, ez = NULL, bw = NULL, cv.block = 0, est = c("lc",
   return(mean(resid.2))
 }
 
-#' Estimated variance-covariance matrix from TVPOLS
+
+#' Time-varying Correlation Estimation
 #'
-#' \code{tvLM} is used to fit a time-varying coefficients linear model
+#' Estimation of a time-varying/functional coefficients correlation matrix using the local constant or the local linear kernel
+#' smoothing methodologies.
+#' 
 #'
-#' Models for \code{tvLM} are specified symbolically using the same formula
-#' format than function \code{lm}. A typical model has the form \emph{response} ~ \emph{terms}
-#' where response is the (numeric) response vector and terms is a series of terms which
-#' specifies a linear predictor for response. A terms specification of the form
-#' first + second indicates all the terms in first together with all the terms
-#' in second with duplicates removed. A specification of the form first:second indicates
-#' the set of terms obtained by taking the interactions of all terms in first with all
-#' terms in second. The specification first*second indicates the cross of first and second.
-#' This is the same as first + second + first:second.
-#'
-#' A formula has an implied intercept term. To remove this use either
-#' y ~ x - 1 or y ~ 0 + x.
-#'
-#' @rdname tvLM
-#' @aliases tvlm-class tvlm
-#' @param formula An object of class formula.
-#' @param z A vector with the smoothing variable.
+#' @param x A matrix.
+#' @param z A vector with the variable over which coefficients are smooth over.
 #' @param ez (optional) A scalar or vector with the smoothing values. If 
 #' values are not included then the vector \code{z} is used instead.
-#' @param data An optional data frame or matrix.
-#' @param bw An opcional scalar. It represents the bandwidth in
-#' the estimation of trend coefficients. If NULL, it is selected by cross validation. 
-#' @param cv.block A positive scalar with the size of the block in leave one block out cross-validation.
-#' By default 'cv.block=0' meaning leave one out cross-validation.
-#' @param est The nonparametric estimation method, one of "lc" (default) for linear constant
-#'  or "ll" for local linear.
-#' @param tkernel A character, either "Triweight" (default), "Epa" or "Gaussian" kernel function.
-#' @param singular.ok	Logical. If FALSE, a singular model is an error.
+#' @param bw (optional) A scalar.
+#' @param cv.block A positive scalar with the size of the block in leave-one block-out cross-validation.
+#' By default 'cv.block=0' meaning leave-one-out cross-validation.
+#' @param est A character, either "lc" or "ll" for local constant or local linear.
+#' @param tkernel A character, either "Triweight, "Epa" or "Gaussian" kernel functions.
 #'
-#' @return An object of class \code{tvlm}
-#' The object of class \code{tvlm} have the following components:
-#' \item{coefficients}{A matrix of dimensions}
-#' \item{fitted}{The fitted values.}
-#' \item{residuals}{Estimation residuals.}
-#' \item{x}{A matrix with the regressors data.}
-#' \item{y}{A vector with the dependent variable data.}
-#' \item{z}{A vector with the smoothing variable.}
-#' \item{ez}{A vector with the smoothing estimation variable.}
-#' \item{bw}{Bandwidth of mean estimation.}
-#' \item{est}{Nonparametric estimation methodology.}
-#' \item{tkernel}{Kernel used in estimation.}
-#' \item{level}{Confidence interval range.}
-#' \item{runs}{Number of bootstrap replications.}
-#' \item{tboot}{Type of bootstrap.}
-#' \item{BOOT}{List with all bootstrap replications of \code{coefficients}, if done.}
+#' @return An array of dimension neq x neq x obs.
 #' 
+#' @seealso \code{\link{tvCov}}
+#'
+#' @examples
+#' ##Generate two independent (uncorrelated series)
+#' y <- cbind(rnorm(100, sd = 4), rnorm(100, sd = 1))
+#'
+#' ##Estimation variance-variance matrix. If the bandwidth is unknown, it can
+#' ##calculated with function bwCov()
+#' Rho.hat <-  tvCor(y, bw = 1.4)
+#' 
+#' ##The first time estimate
+#' print(Rho.hat[,,1])
+#' ##The mean over time of all estimates
+#' print(apply(Rho.hat, 1:2, mean))
+
+#' ##Generate two dependent variables
+#' y <- MASS::mvrnorm(n = 100, mu = c(0,0), Sigma = cbind(c(1, -0.5), c(-0.5, 4)))
+#' 
+#' ##Estimation variance-variance matrix
+#' Rho.hat <-  tvCor(y, bw = 3.2)
+#' ##The first time estimate
+#' print(Rho.hat[,,1])
+#'
+#' @export tvCor
+#'
+tvCor <- function(x, z = NULL, ez = NULL, bw = NULL, cv.block = 0, est = c("lc", "ll"), 
+               tkernel = c("Triweight", "Epa", "Gaussian"))
+{
+  correlation <- tvCov (x, z, ez, bw, cv.block, est, tkernel)
+  obs <- dim(correlation)[3]
+  ncol <- dim(correlation)[2]
+  for (t in 1:obs)
+    correlation[,,t] <- cov2cor(correlation[,,t])
+  return(correlation)
+}
+

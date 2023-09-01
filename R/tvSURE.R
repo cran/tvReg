@@ -267,7 +267,12 @@ tvSURE <- function (formula, z = NULL, ez = NULL, bw = NULL, cv.block = 0, data,
     while((tolrel>tol) && (itertemp < maxiter))
     {
       cat("\n Step ", itertemp + 1, " tol: ", abs(tolrel))
-      Sigma <- tvCov(bw = bw.cov, x = result$residuals, z = z, tkernel = tkernel)
+      Sigma <- try(tvCov(x = result$residuals, z = z, bw = bw.cov, tkernel = tkernel))
+      if (!inherits(Sigma, "array"))
+      {
+        bw.cov <- bwCov(x = result$residuals, z = z, cv.block = cv.block, tkernel = tkernel)
+        Sigma <- try(tvCov(x = result$residuals, z = z, bw = bw.cov, tkernel = tkernel))
+      }
       temp <- tvGLS(x = x, y = y, z = z, ez = ez, bw = bw, Sigma = Sigma, R = R, r = r,
                     est = est, tkernel = tkernel)
       tolrel <- mean(abs((result$coefficients - temp$coefficients)/result$coefficients))
