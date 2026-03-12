@@ -2,9 +2,7 @@
 % Please edit documentation in R/bw.R
 \name{bwCov}
 \alias{bwCov}
-\title{Covariance Bandwidth Calculation by Cross-Validation
-\emph{bwCov} calculates a single bandwidth to estimate the time-varying variance-
-covariance matrix.}
+\title{Covariance Bandwidth Calculation by Cross-Validation}
 \usage{
 bwCov(
   x,
@@ -31,8 +29,7 @@ or "ll" for local linear.}
 A scalar.
 }
 \description{
-Covariance Bandwidth Calculation by Cross-Validation
-\emph{bwCov} calculates a single bandwidth to estimate the time-varying variance-
+\code{bwCov} calculates a single bandwidth to estimate the time-varying variance-
 covariance matrix.
 }
 \examples{

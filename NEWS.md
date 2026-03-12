@@ -1,3 +1,17 @@
+# tvReg 0.5.10
+
+* Added functionality of the unit shock inside function `tvIRF` by adding `unit.shock` argument to `tvIRF()` and `tvPsi()`. This allows users to compute impulse responses to a one-unit orthogonalized 
+  shock, facilitating interpretation in macroeconomic contexts.
+  
+* Improved computational efficiency in `tvPsi()` by moving 
+  covariance decomposition outside the horizon loop.
+  
+* Improved bandwidth selection robustness.
+
+* Updated references and citation.
+
+* Acknowledgment: Special thanks to Sebin Nidhiri (University of Houston) for suggesting the unit shock feature.
+
 # tvReg 0.5.9
 
 * Bug fix in `bwCov` when `bw` is `NULL`.

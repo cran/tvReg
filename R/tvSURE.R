@@ -29,10 +29,10 @@
 #' has zero mean and  covariance matrix \eqn{E(u_t u_t') = \Sigma_t}.
 #'
 #' @references
-#' Casas, I., Ferreira, E., and Orbe, S. (2017) Time-Varying Coefficient Estimation 
-#' in SURE Models: Application to Portfolio Management. Available at SSRN: 
-#' https://ssrn.com/abstract=3043137
-#' 
+#' Casas, I., Ferreira, E., and Orbe, S. (2021). Time-Varying Coefficient Estimation 
+#' in SURE Models: Application to Portfolio Management. 
+#' \emph{Journal of Financial Econometrics}, 19, 707-745.
+#'  
 #' Chen, X. B., Gao, J., Li, D., and Silvapulle, P (2017) Nonparametric Estimation and 
 #' Forecasting for Time-Varying Coefficient Realized Volatility Models.
 #' \emph{Journal of Business and Economic Statistics}, pp.1-13

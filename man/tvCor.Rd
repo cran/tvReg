@@ -32,7 +32,7 @@ By default 'cv.block=0' meaning leave-one-out cross-validation.}
 \item{tkernel}{A character, either "Triweight, "Epa" or "Gaussian" kernel functions.}
 }
 \value{
-A matrix of dimension obs x neq x neq.
+An array of dimension neq x neq x obs.
 }
 \description{
 Estimation of a time-varying/functional coefficients correlation matrix using the local constant or the local linear kernel

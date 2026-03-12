@@ -308,10 +308,11 @@ plot.tvirf <- function (x, obs.index = NULL, impulse = NULL, response = NULL,
   else
     obs.index2 <- obs.index
   x.axis <- 1:tail(dim(x$irf[[1]]), 1)
+  shock_type <- if(x$unit.shock) "Unit Shock" else "One SD Shock"
   for (i in 1:length(impulse))
   {
     iname <- inames[i]
-    main <- paste0("Impulse variable: ", iname)
+    main <- paste0("Impulse variable: ", iname, " - ", shock_type)
     if (x$cumulative)
       main <- paste(main, "(cumulative)", sep = " ")
     sub <- "horizon"
@@ -366,6 +367,7 @@ plot.tvirf <- function (x, obs.index = NULL, impulse = NULL, response = NULL,
     }
     else if(plot.type == "single")
     {
+      
       graphics::par(mfrow = c(1, 1), mar = c(4, 4, 4, 1), oma = c(3, 0, 2, 1))
       ylabel <- rnames
     
@@ -374,7 +376,7 @@ plot.tvirf <- function (x, obs.index = NULL, impulse = NULL, response = NULL,
         rname <- rnames[j]
         ylim <- range(c(impulses[rname, ], lower[rname, ], upper[rname, ]))
         graphics::plot(x.axis, impulses[rname, ], type = "l", ylim = ylim, axes = FALSE,
-                     ylab = ylabel[j], main = main, xlab = "", ...)
+                     ylab = ylabel[j], main = "", xlab = "", ...)
         if(!is.null(lower))
         {
           graphics::polygon(c(rev(x.axis), x.axis), c(rev(upper[rname, ]), lower[rname,]),

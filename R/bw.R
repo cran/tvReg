@@ -1,17 +1,9 @@
 #' Bandwidth Selection by Cross-Validation
 #'
-#' Calculate bandwidth(s) by cross-validation for functions tvSURE, tvVAR and tvLM.
+#' Calculate bandwidth(s) by cross-validation for functions \code{tvSURE}, \code{tvVAR} and \code{tvLM}.
 #'
-#' @rdname bw
 #' @param x An object used to select a method.
 #' @param ... Other parameters passed to specific methods.
-#' @return \code{bw} returns a vector or a scalar with the bandwith to estimate the mean or the covariance
-#' residuals, fitted values.
-#' @export
-bw <- function(x, ...)  UseMethod("bw", x)
-
-
-#' @rdname bw
 #' @param y A matrix or vector with the dependent variable(s).
 #' @param z A vector with the variable over which coefficients are smooth over.
 #' @param cv.block A positive scalar with the size of the block in leave-one block-out cross-validation.
@@ -19,9 +11,18 @@ bw <- function(x, ...)  UseMethod("bw", x)
 #' @param est The nonparametric estimation method, one of "lc" (default) for linear constant
 #' or "ll" for local linear.
 #' @param tkernel A character, either "Triweight" (default), "Epa" or "Gaussian" kernel function.
-#' @param singular.ok	Logical. If FALSE, a singular model is an error.
+#' @param singular.ok Logical. If FALSE, a singular model is an error.
+#' @param method A character with the choice of panel model/estimation method:
+#' \itemize{
+#'   \item \code{"tvPOLS"} (default): the data is pooled and estimated with time-varying OLS. 
+#'   No individual or time effects are estimated.
+#'   \item \code{"tvFE"}: individual effects which might be correlated with 
+#'   the regressors are estimated.
+#'   \item \code{"tvRE"}: individual effects are considered random and independent
+#'   of the regressors.
+#' }
 #'
-#' @return A scalar or a vector of scalars.
+#' @return A scalar or a vector of scalars with the bandwidth(s) selected by cross-validation.
 #'
 #' @examples
 #' ##Generate data
@@ -34,10 +35,14 @@ bw <- function(x, ...)  UseMethod("bw", x)
 #' ##Select bandwidth by cross-validation
 #' bw <- bw(X, y, est = "ll", tkernel = "Gaussian")
 #'
+#' @export
+bw <- function(x, ...)  UseMethod("bw", x)
+
+#' @rdname bw
 #' @method bw default
 #' @export
-#'
-bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"),
+bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), 
+                       tkernel = c("Triweight", "Epa", "Gaussian"),
                        singular.ok = TRUE, ...)
 { 
   if(!inherits(x, c("matrix", "data.frame", "vector", "numeric", "integer")))
@@ -87,24 +92,20 @@ bw.default <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"), tkerne
                                  cv.block = cv.block, est = est, tkernel = tkernel, 
                                  singular.ok = singular.ok),
                     silent = TRUE)
-      if (!inherits(result, "list"))
-        value <- .Machine$double.xmax
-      else
+      if (inherits(result, "list") && !is.na(result$value))
       {
-        if(is.na(result$value))
-          value <- .Machine$double.xmax
-        else
-        {
-          value <- result$value
-          bw[j] <- result$par
-        }
+        value <- result$value
+        bw[j] <- result$par
+      } 
+      else 
+      {
+        value <- .Machine$double.xmax
       }
       iter <- iter + 1
     }
   }
   return(bw)
 }
-
 
 #' @examples
 #' data( Kmenta, package = "systemfit" )
@@ -177,27 +178,24 @@ bw.list <- function(x, y, z = NULL, cv.block = 0, est = c("lc", "ll"),
                                  upper = upper, x = x[[j]], y = y[, j], z = z,
                                  cv.block = cv.block, est = est, tkernel = tkernel, 
                                  singular.ok = singular.ok), silent = TRUE)
-      if (!inherits(result, "list"))
-        value <- .Machine$double.xmax
-      else
+      if (inherits(result, "list") && !is.na(result$value))
       {
-        if(is.na(result$value))
-          value <- .Machine$double.xmax
-        else
-        {
-          value <- result$value
-          bw[j] <- result$par
-        }
+        value <- result$value
+        bw[j] <- result$par
+      } 
+      else 
+      {
+        value <- .Machine$double.xmax
       }
       iter <- iter + 1
     }
   }
   return(bw)
 }
+
 #' @rdname bw
 #' @method bw tvlm
 #' @export
-
 bw.tvlm <- function(x, ...)
 {
   y <- x$y
@@ -212,26 +210,22 @@ bw.tvlm <- function(x, ...)
 
 #' @rdname bw
 #' @method bw tvar
-#'
 #' @export
 bw.tvar <- bw.tvlm
 
 #' @rdname bw
 #' @method bw tvvar
-#'
 #' @export
 bw.tvvar <- bw.tvlm
 
 #' @rdname bw
 #' @method bw tvsure
-#'
 #' @export
 bw.tvsure <- bw.tvlm
 
 #' @rdname bw
 #' @method bw tvplm
 #' @export
-
 bw.tvplm <- function(x, ...)
 {
   if(!inherits(x, "tvplm"))
@@ -259,14 +253,14 @@ bw.tvplm <- function(x, ...)
   }
   iter <- 0
   value <- .Machine$double.xmax
+  bw <- top
   while(value == .Machine$double.xmax)
   {
     if(iter == 10)
     {
-      value <- 0
-      bw <- 100
       warning("Maximum number of iterations reached in bandwidth calculation: either the function
               is constant, or no convergence of bandwidth. \n")
+      bw <- top
       break()
     }
     if (method != "within")
@@ -274,47 +268,32 @@ bw.tvplm <- function(x, ...)
                                  lower = lower, upper = upper, x = x, y = y, z = z, 
                                  neq = neq, obs = obs, cv.block = cv.block, est = est, 
                                  tkernel = tkernel),
-                    silent = FALSE)
+                    silent = TRUE)
     else 
       result <- try(stats::optim(stats::runif(1, lower, top), .tvFE.cv, method = "Brent",
                                  lower = lower, upper = top, x = x, y = y, z = z, 
                                  neq = neq, obs = obs, cv.block = cv.block,  est = est, 
                                  tkernel = tkernel),
-                    silent = FALSE)
-    if (!inherits(result, "list"))
-      value <- .Machine$double.xmax
-    else
+                    silent = TRUE)
+    if (inherits(result, "list") && !is.na(result$value))
     {
-      if(is.na(result$value))
-        value <- .Machine$double.xmax
-      else
-      {
-        value <- result$value 
-        bw <- result$par
-      }
+      value <- result$value 
+      bw <- result$par
+    } 
+    else 
+    {
+      value <- .Machine$double.xmax
     }
     iter <- iter + 1
   }
   return(abs(bw))  
 }
 
-#' 
-#' Panel Model Bandwidth Calculation by Cross-Validation
-#' \emph{bwPanel} calculates a single bandwidth to estimate the time-varying 
-#' coefficients of a panel data modelc
-#' @param method A character with the choice of panel model/estimation method:
-#' If method = \code{tvPOLS} (default) then the data is pooled estimated with time-varying OLS. 
-#' No individual or time effects are estimated
-#' If method = \code{tvFE} then individual effects which might be correlated with 
-#' the regressors are estimated.
-#' If method = \code{tvRE} then individual effects are considered random and independent
-#' of the regressors.
-#' @return A scalar.
-#' @method bw pdata.frame
 #' @rdname bw
+#' @method bw pdata.frame
 #' @export
-bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0, 
-                  est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"), ...)
+bw.pdata.frame <- function(x, z = NULL, method, cv.block = 0, 
+                           est = c("lc", "ll"), tkernel = c("Triweight", "Epa", "Gaussian"), ...)
 {  
   dimen <- plm::pdim(x)
   neq <- dimen$nT$n
@@ -322,13 +301,9 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
   y <- stats::model.extract(x, "response")
   if (stats::is.empty.model(x))
     stop ("No regressors in the model. \n")
-  else
-  {
-    terms <- attr(x, "terms")
-    x <- stats::model.matrix(terms, x)
-    var.names <- colnames(x)
-  }
-  nvar <-  NCOL (x)
+  terms <- attr(x, "terms")
+  x_mat <- stats::model.matrix(terms, x)
+  
   tkernel <- match.arg(tkernel)
   est <- match.arg(est)
   if(is.null(z))
@@ -339,58 +314,54 @@ bw.pdata.frame<-function(x, z = NULL, method, cv.block = 0,
   }
   else
   {
-    top <- (max(z) - min(z))*5
+    top <- (max(z) - min(z)) * 5
     upper <- top
     lower <- top * 0.001
   }
   value <- .Machine$double.xmax
   iter <- 0
+  bw <- top
   while(value == .Machine$double.xmax)
   {
     if(iter == 10)
     {
-      value <- 0
-      bw <- top
       warning("Maximum number of iterations reached in bandwidth calculation: either the function
             is constant, or no convergence of bandwidth. \n")
+      bw <- top
       break()
     }
-
+    
     if (method != "within")
       result <- try(stats::optim(stats::runif(1, lower, top), .tvRE.cv, method = "Brent",
-                                 lower = lower, upper = upper, x = x, y = y, z = z, 
+                                 lower = lower, upper = upper, x = x_mat, y = y, z = z, 
                                  neq = neq, obs = obs, cv.block = cv.block, est = est, 
                                  tkernel = tkernel),
-                    silent = FALSE)
+                    silent = TRUE)
     else 
       result <- try(stats::optim(stats::runif(1, lower, top), .tvFE.cv, method = "Brent",
-                                 lower = lower, upper = top, x = x, y = y, z = z, 
+                                 lower = lower, upper = top, x = x_mat, y = y, z = z, 
                                  neq = neq, obs = obs, cv.block = cv.block,  est = est, 
                                  tkernel = tkernel),
-                    silent = FALSE)
-    if (!inherits(result, "list"))
-        value <- .Machine$double.xmax
-    else
+                    silent = TRUE)
+    if (inherits(result, "list") && !is.na(result$value))
     {
-      if(is.na(result$value))
-        value <- .Machine$double.xmax
-      else
-      {
-        value <- result$value 
-        bw <- result$par
-      }
+      value <- result$value
+      bw <- result$par
+    } 
+    else 
+    {
+      value <- .Machine$double.xmax
     }
     iter <- iter + 1
   }
-  return(abs(result$par))  
+  return(abs(bw))   
 }
 
-
-
-#' 
 #' Covariance Bandwidth Calculation by Cross-Validation
-#' \emph{bwCov} calculates a single bandwidth to estimate the time-varying variance-
+#' 
+#' \code{bwCov} calculates a single bandwidth to estimate the time-varying variance-
 #' covariance matrix.
+#' 
 #' @param x A matrix or a data frame.
 #' @inheritParams bw
 #' @return A scalar.
@@ -429,6 +400,7 @@ bwCov <- function(x, z = NULL, cv.block = 0, est = c("lc", "ll"),
     lower <- top * 0.001
   }
   value  <- .Machine$double.xmax
+  bw <- top
   while(value == .Machine$double.xmax)
   {
     if(iter == 10)
@@ -443,12 +415,14 @@ bwCov <- function(x, z = NULL, cv.block = 0, est = c("lc", "ll"),
                                lower = 5/obs, upper = 20, x = x, z = z, cv.block = cv.block,
                                est = est, tkernel = tkernel),
                   silent = TRUE)
-    if (!inherits(result, "list"))
-      value <- .Machine$double.xmax
-    else
+    if (inherits(result, "list") && !is.na(result$value))
     {
       value <- result$value
       bw <- result$par
+    } 
+    else 
+    {
+      value <- .Machine$double.xmax
     }
     iter <- iter + 1
   }

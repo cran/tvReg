@@ -53,7 +53,8 @@
   ortho,
   ortho.cov,
   bw.cov,
-  cumulative
+  cumulative,
+  unit.shock
 )
 
 .tvOLS.cv(
