@@ -218,6 +218,7 @@ plot(model.tvIRF, obs.index = 100, impulse = "tbi", response = "inf")
 
 ## ----tvIRF2.1-----------------------------------------------------------------
 ##Estimate a the impulse response functions with irf and tvIRF to interpret unit shocks from
+set.seed(42)
 model.tvIRF2 <- tvIRF(model.tvVAR, unit.shock = TRUE)
 
 ##Plot the mean all tvIRF over time

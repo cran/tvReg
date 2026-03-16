@@ -1,11 +1,11 @@
-011ef638ac9782059df476a427b3f178 *DESCRIPTION
+b01b9338922964478db5b000a089c7f8 *DESCRIPTION
 b7245e1effb1179308356283a72187e0 *NAMESPACE
-23ebe4aeb660f20631cf25d8edd7632c *NEWS.md
+10c38450ab1b8f32682b853033f7032a *NEWS.md
 edc72d59f2eb306c2ddf869e03dfa638 *R/bw.R
 aff8ca41e7f36954468517772bb65a6d *R/confint_tvReg.R
 aed11f6f2701a3d0d8a521a2506ed8ce *R/forecast_tvreg.R
 564c886ca9f739b3249471f4540bd050 *R/kernels.R
-4140e3b4bcdc85e97984fdbc6bc7cdef *R/plot_tvReg.R
+e62a9f6c8765476a6fa4ac2127d98178 *R/plot_tvReg.R
 ac648735116e348aeb7982bdd38fab4c *R/predict_tvReg.R
 2b51d3b4b795e14bc5942c4d27bf1cb4 *R/print_tvReg.R
 4bbbf79fed05f0779677cc966f131ba3 *R/summary_tvReg.R
@@ -36,9 +36,9 @@ f873c6c4a684db9c3b51ceeef1dce9c0 *README.md
 f9a6f34d79a8e947f512223f00722ef3 *data/OECD.rda
 d07c6c981e0d132cfd120676566605ee *data/RV.rda
 01e2a140dea6664a0d12e97b328cc52b *inst/CITATION
-2155d5dae91dc4f078bcb0fba2c22a7a *inst/doc/tvReg.R
-ef5dc9564a064e4169b1278ad0cdde89 *inst/doc/tvReg.Rmd
-97182d5bb26b341fec6235e64289129b *inst/doc/tvReg.html
+ecdb96823ddbc49ec1ce49f4d5943fae *inst/doc/tvReg.R
+698d902d094418e714d7d5e2f039bc5f *inst/doc/tvReg.Rmd
+57e71c5a9c58e68fa3e4de2d18b3bc97 *inst/doc/tvReg.html
 ef599aa4d83b5858f32511a402f8d342 *man/CEES.Rd
 ffadd55f09cf3b4c75aa6f2d038ada77 *man/FF5F.Rd
 9eb7473eb20616fa711999ad02dbf6f8 *man/OECD.Rd
@@ -70,4 +70,4 @@ b62f3624025d30984c0133a6fd831c5c *man/tvReg-package.Rd
 05b1173376c43214541126590bd6c1eb *man/tvSURE.Rd
 a2f4166822ca8bca22bc312d0dcfa056 *man/tvVAR.Rd
 4083830ec0086846312ebcb62b0f47d8 *man/update.tvReg.Rd
-ef5dc9564a064e4169b1278ad0cdde89 *vignettes/tvReg.Rmd
+698d902d094418e714d7d5e2f039bc5f *vignettes/tvReg.Rmd

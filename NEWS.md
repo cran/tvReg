@@ -1,6 +1,11 @@
+# tvReg 0.5.11
+
+* Fixed a bug in plot methods where non-finite values caused a crash on arm64 architectures
+
 # tvReg 0.5.10
 
-* Added functionality of the unit shock inside function `tvIRF` by adding `unit.shock` argument to `tvIRF()` and `tvPsi()`. This allows users to compute impulse responses to a one-unit orthogonalized 
+* Added functionality of the unit shock inside function `tvIRF` by adding `unit.shock` argument to `tvIRF()` and `tvPsi()`. 
+  This allows users to compute impulse responses to a one-unit orthogonalized 
   shock, facilitating interpretation in macroeconomic contexts.
   
 * Improved computational efficiency in `tvPsi()` by moving 
